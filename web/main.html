@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal File Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./src/main.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">法律文书管理系统</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link active" href="#">主页</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        新建
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#new-caseModal">案件</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#new-clientModal">客户档案</a></li>
+                        <li><a class="dropdown-item" href="#">合同</a></li>
+
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        个人
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <h2>{{ user_name }}</h2>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">个人档案</a></li>
+                        <li><a href="/logout" class="btn btn-danger">登出</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="form-inline ml-auto">
+                <div class="row">
+                    <div class="col">
+                         <input class="form-control" type="search" placeholder="输入关键词...">
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-light" type="submit">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </nav>
+    <div id="new-caseModal" aria-hidden="true" aria-labelledby="new-caseModalLabel" class="modal fade"
+           data-bs-backdrop="static"  tabindex="-1">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title text-body" id="new-caseModalLabel">新建案件</h5>
+                              </div>
+                              <div class="modal-body">
+                                <form>
+                                   <div class="form-group row-form-group mb-3">
+                                       <form>
+                                           <label for="name" class="col-form-label text-body">查找现有客户</label>
+                                           <input type="text" class="col-form-control" id="name" name="name">
+                                       </form>
+                                       <label class="col text-body">或者</label>
+                                       <button class="col-btn btn-primary" onclick="switchModal('new-clientModal')">新建客户档案</button>
+                                   </div>
+                                  <div class="form-group mb-3">
+                                    <label for="opposite_party_name" class="col-form-label text-body">被告名称</label>
+                                    <input type="text" class="form-control" id="opposite_party_name">
+                                  </div>
+                                  <div class="form-group mb-3">
+                                    <label for="case_type" class="col-form-label text-body">案由</label>
+                                    <input type="text" class="form-control" id="case_type" >
+                                  </div>
+                                  <div class="form-group mb-3">
+                                    <label for="court" class="col-form-label text-body">审理机关</label>
+                                    <input type="text" class="form-control" id="court">
+                                  </div>
+                                  <div class="form-group mb-3">
+                                    <label for="dispute_subject" class="col-form-label text-body">诉讼（仲裁）争议标的</label>
+                                    <input type="text" class="form-control" id="dispute_subject">
+                                  </div>
+                                  <div class="form-group mb-3">
+                                    <label for="agency_fee" class="col-form-label text-body">代理费用</label>
+                                    <input type="text" class="form-control" id="agency_fee">
+                                  </div>
+                                   <div class="row-form-select mb-3">
+                                    <select class="col-form-select form-select-lg" aria-label="Default select example">
+                                        <option selected>选择审级</option>
+                                      <option value="1">一审</option>
+                                      <option value="2">二审</option>
+                                      <option value="3">三审</option>
+                                    </select>
+                                    <select class="col-form-select form-select-lg" aria-label="Default select example">
+                                        <option selected>选择授权选项</option>
+                                        <option value="1">一级</option>
+                                        <option value="2">二级</option>
+                                        <option value="3">三级</option>
+                                        <option value="4">四级</option>
+                                        <option value="5">五级</option>
+                                        <option value="6">六级</option>
+                                        <option value="7">七级</option>
+                                        <option value="8">八级</option>
+                                    </select>
+                                  </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary">保存</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+    <div id="new-clientModal" aria-hidden="true" aria-labelledby="new-clientModalLabel" class="modal fade"
+              data-bs-backdrop="static" tabindex="-1">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title text-body" id="new-clientModalLabel">新建客户档案</h5>
+                              </div>
+                              <div class="modal-body">
+                                <form>
+                                  <div class="form-group mb-3">
+                                    <label for="name" class="col-form-label text-body">客户名</label>
+                                    <input type="text" class="form-control" id="name">
+                                  </div>
+                                  <div class="form-group mb-3">
+                                    <label for="phone" class="col-form-label text-body">手机号</label>
+                                    <input type="text" class="form-control" id="phone">
+                                  </div>
+                                  <div class="form-group mb-3">
+                                    <label for="email " class="col-form-label text-body">邮箱</label>
+                                    <input type="text" class="form-control" id="email">
+                                  </div>
+                                  <div class="form-group mb-3">
+                                    <label for="citizen_id" class="col-form-label text-body">身份证号</label>
+                                    <input type="text" class="form-control" id="citizen_id" >
+                                  </div>
+                                  <div class="form-group mb-3">
+                                    <label for="postal_code" class="col-form-label text-body">邮政编码</label>
+                                    <input type="text" class="form-control" id="postal_code">
+                                  </div>
+                                  <div class="form-group mb-3">
+                                    <label for="address " class="col-form-label text-body">住址</label>
+                                    <input type="text" class="form-control" id="address">
+                                  </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-primary" onclick="newClient()">保存</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+    <div id="profileModal" class="modal fade" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">编辑个人信息</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 编辑表单 -->
+                <form>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">用户名</label>
+                        <input type="text" class="form-control" id="username" value="{{ user_name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">电话</label>
+                        <input type="text" class="form-control" id="phone" value="{{ user_phone }}">
+                    </div>
+                    <!-- 更多字段 -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">保存更改</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="container-fluid">
+        <div class="row">
+            <aside class="col-md-2 sidebar">
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="#">Client Menu</a>
+                    <a class="nav-link" href="#">File Menu</a>
+                    <!-- More menu options -->
+                </nav>
+            </aside>
+            <main class="col-md-10">
+                <section class="file-content">
+                    <!-- Content will be dynamically loaded here -->
+                </section>
+                <aside class="recent-files">
+                    <h3>Recent Files</h3>
+                    <!-- List of recent files will be displayed here -->
+                </aside>
+            </main>
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<script src="./src/main.js"></script>
+</body>
+</html>

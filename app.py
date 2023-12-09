@@ -7,8 +7,7 @@ from flask_cors import CORS
 import os
 import uuid
 
-app = Flask(__name__)
-#app = Flask(__name__, template_folder='web')
+app = Flask(__name__, template_folder='web')
 CORS(app, supports_credentials=True)
 app.secret_key = 'your_secret_key'  # 设置一个安全的密钥
 
