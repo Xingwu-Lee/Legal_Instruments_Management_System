@@ -71,6 +71,14 @@ def profile():
     else:
         return redirect(url_for('login'))  # 如果无法获取用户信息，则重定向到登录页面
 '''
+@app.route('/protected', methods=['GET'])
+@jwt_required()
+def protected():
+    current_user = get_jwt_identity()
+    # 可以使用current_user来获取当前登录的用户ID
+    # ...
+    return jsonify(logged_in_as=current_user)
+
 @app.route('/api/user/<user_id>/documents', methods=['GET', 'POST'])
 @jwt_required()
 def manage_documents():
