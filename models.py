@@ -50,4 +50,5 @@ class Case(db.Model):
     court = db.Column(db.String(50))
     trial_level = db.Column(db.Enum('1', '2', '3'), default='1', nullable=False)
     dispute_subject = db.Column(db.Numeric(10, 2))
+    agency_fee = db.Column(db.Numeric(10, 2))
     c_permission = db.Column(db.Enum('1', '2', '3', '4', '5', '6', '7', '8'), default='1', nullable=False)
