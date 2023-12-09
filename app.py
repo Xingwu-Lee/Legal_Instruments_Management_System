@@ -1,12 +1,16 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, request, jsonify, redirect, url_for, session, render_template
+#from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import User, db, Case
 from flask_cors import CORS
+import os
+import uuid
 
 app = Flask(__name__)
+#app = Flask(__name__, template_folder='web')
 CORS(app, supports_credentials=True)
+app.secret_key = 'your_secret_key'  # 设置一个安全的密钥
 
 # Database Configuration
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'your-database-uri'
@@ -22,33 +26,50 @@ app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Change this!
 #db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
-
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    user = User.query.filter_by(name=data['name']).first()
+    if user is None:
+        return jsonify({'message': '用户名不存在'}), 401
+    stored_hashed_password = user.password
+    stored_salt = user.salt
+    if check_password_hash(stored_hashed_password, data['password'] + stored_salt):
+        token = create_access_token(identity=user.id)
+        session['user_id'] = user.id  # 存储用户ID到会话
+        return jsonify({'redirect': url_for('profile')}), 200
+    else:
+        return jsonify({'message': '密码错误'}), 401
 
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
     existing_user = User.query.filter_by(name=data['name']).first()
+    #调试用
     print("Received data:", data)
     print("Existing user:", existing_user)
     if existing_user:
-        return jsonify({'message': '用户名已存在，来自：flask'}), 409
-    hashed_password = generate_password_hash(data['password'], method='pbkdf2:sha256')
-    new_user = User(name=data['name'], password=hashed_password, role=data['role'], phone=data['phone'])
+        return jsonify({'message': '用户名已存在'}), 409
+    #生成盐 加密密码 用户id
+    salt = generate_salt()     # 生成随机盐
+    password = generate_password_hash(data['password'] + salt, method='pbkdf2:sha256')
+    user_id = str(uuid.uuid4())
+    new_user = User(id=user_id, name=data['name'], password=password, salt=salt, phone=data['phone'])
+    print("New user info:", new_user)
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({'message': 'Registered successfully!'}), 201
+    return jsonify({'message': '注册成功！'}), 201
 
-@app.route('/api/login', methods=['POST'])
-def login():
-    data = request.get_json()
-    user = User.query.filter_by(name=data['name']).first()
-    if not user or not check_password_hash(user.password, data['password']):
-        return jsonify({'message': '用户名或密码错误，来自：flask'}), 401
+@app.route('/api/profile')
+def profile():
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+    user = User.query.get(user_id)  # 从数据库获取用户信息
+    if user:
+        return render_template('main.html', user_name=user.name, user_phone=user.phone, token=token)
     else:
-        token = create_access_token(identity=user.id)
-        return jsonify({'token': token}), 200
-
-
+        return redirect(url_for('login'))  # 如果无法获取用户信息，则重定向到登录页面
 '''
 @app.route('/api/user/<user_id>/documents', methods=['GET', 'POST'])
 @jwt_required()
@@ -114,6 +135,10 @@ def manage_cases():
 
 
 '''
+def generate_salt():
+    # 在此函数中生成随机盐
+    return os.urandom(16).hex()
+    pass
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

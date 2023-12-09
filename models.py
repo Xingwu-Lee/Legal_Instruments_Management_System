@@ -1,12 +1,14 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import uuid
 
 db = SQLAlchemy()
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     name = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    salt = db.Column(db.String(64), nullable=False)
     role = db.Column(db.Enum('lawyer', 'admin'), default='lawyer', nullable=False)
     phone = db.Column(db.String(20))
     register_time = db.Column(db.DateTime, default=datetime.utcnow)
@@ -52,3 +54,4 @@ class Case(db.Model):
     dispute_subject = db.Column(db.Numeric(10, 2))
     agency_fee = db.Column(db.Numeric(10, 2))
     c_permission = db.Column(db.Enum('1', '2', '3', '4', '5', '6', '7', '8'), default='1', nullable=False)
+
