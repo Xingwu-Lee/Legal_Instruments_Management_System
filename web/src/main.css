@@ -1,84 +1,55 @@
-/* style.css */
+/* main.css */
+
+/* 通用样式 */
 body {
-    font-family: Arial, sans-serif;
+    font-family: Arial, sans-serif; /* 确保与 Bootstrap 字体风格协调 */
 }
 
+/* 导航栏样式 */
 .navbar {
+    background-color: dodgerblue; /* 定制导航栏背景色 */
+}
+
+.nav-link {
+    color: white; /* 设置导航链接的颜色 */
     background-color: dodgerblue;
-    color: white;
 }
 
-.header-title {
-    font-size: 1.5rem;
-    margin-right: 1rem;
-}
-
-.main-nav ul {
-    list-style-type: none;
-    display: flex;
-    align-items: center;
-}
-
-.main-nav li {
-    padding: 0 1rem;
-    position: relative;
-}
-
-.main-nav a {
-    color: white;
-    text-decoration: none;
+.nav-link:hover {
+    background-color: lightskyblue; /* 设置导航链接悬停时的背景色 */
 }
 
 .dropdown-menu {
-    background-color: dodgerblue;
+    background-color: dodgerblue; /* 设置下拉菜单的背景色 */
 }
 
 .dropdown-item {
-    color: white;
+    color: white; /* 设置下拉菜单项的文字颜色 */
 }
 
-.main-nav li:hover .dropdown-menu {
-    display: block;
-}
 
-.navbar-form {
-    padding-left: 1rem;
-}
-
+/* 其他页面元素样式 */
 .sidebar {
     width: 200px;
     background: #f4f4f4;
     height: 100vh;
     position: fixed;
-    top: 100px; /* Adjust based on your header height */
+    top: 100px; /* 根据您的页面头部高度调整 */
     left: 0;
     overflow-y: auto;
 }
 
 .nav.flex-column {
-    list-style-type: none;
     padding: 1rem;
-}
-
-.nav-link {
-    display: block;
-    padding: 0.5rem 0;
-    color: white;
-    text-decoration: none;
-}
-
-.nav-link:hover {
-    background-color: #ddd;
 }
 
 main {
-    margin-left: 200px;
+    margin-left: 200px; /* 确保主内容区域不被侧边栏遮挡 */
     padding: 1rem;
-    display: flex;
 }
 
 .file-content {
-    flex-grow: 1;
+    flex-grow: 1; /* 确保内容区域充满剩余空间 */
 }
 
 .recent-files {
@@ -92,4 +63,12 @@ main {
 .recent-files h3 {
     border-bottom: 1px solid #ddd;
     padding-bottom: 0.5rem;
+}
+
+.navbar-nav.ml-auto {
+    margin-left: auto;
+}
+
+.nav-link:not(.active) {
+    background-color: whitesmoke; /* 设置未选中选项卡的背景颜色 */
 }
