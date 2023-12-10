@@ -1,5 +1,5 @@
 // Base URL of your Flask server
-const BASE_URL = 'http://127.0.0.1:5000/api';
+const BASE_URL = 'http://127.0.0.1:8080';
 
 // Function for user login
 function login() {
@@ -17,13 +17,18 @@ function login() {
         if (response.status === 200) {
             // Store token or handle login success
             response.json().then(data => {
-                console.log ('Login successful', data);
                 window.location.href = data.redirect;
+                alert('消息：' + window.location.href);
             });
         }
         else if (response.status === 401){
             response.json().then(data => {
             alert('消息：' + data.message); //登录失败
+            });
+        }
+        else if (response.status === 400){
+            response.json().then(data => {
+            alert('消息：' + data.error()); //输入有空项
             });
         }
     });
@@ -53,6 +58,11 @@ function register() {
         } else if (response.status === 409) {  //用户名已存在
             alert('消息：' + data.message);
         }
+        else if (response.status === 400){
+            response.json().then(data => {
+            alert('消息：' + data.error()); //输入有空项
+            });
+        }
     });
 }
 
@@ -61,4 +71,3 @@ function registerPage(){
     document.getElementById('register-form').style.display = 'block';
     document.getElementById('login-form').style.display = 'none';
 }
-// The registration function will be similar, making a POST request to the Flask registration route.

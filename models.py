@@ -20,7 +20,7 @@ class User(db.Model):
 
 
 class Document(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     document_number = db.Column(db.String(20), unique=True, nullable=False)
     title = db.Column(db.String(255), nullable=False)
     type = db.Column(db.String(50), nullable=False)
@@ -29,22 +29,24 @@ class Document(db.Model):
 
 
 class Client(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     name = db.Column(db.String(50), nullable=False)
     phone = db.Column(db.String(20))
+    email = db.Column(db.String(50))
     citizen_id = db.Column(db.String(20), unique=True, nullable=False)
     postal_code = db.Column(db.String(10))
     address = db.Column(db.String(255))
-    email = db.Column(db.String(50))
+
 
     # Relationship
     cases = db.relationship('Case', backref='client', lazy=True)
 
 
 class Case(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(36), primary_key=True, default=str(uuid.uuid4()))
     client_name = db.Column(db.String(100), nullable=False)
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'), nullable=False)
+    lawyer_name = db.Column(db.String(100), nullable=False)
     lawyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     case_number = db.Column(db.String(20), unique=True, nullable=False)
     opposite_party_name = db.Column(db.String(100))
