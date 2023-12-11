@@ -1,6 +1,30 @@
 // Base URL of your Flask server
 const BASE_URL = 'http://127.0.0.1:8080';
 
+
+function modalControl(newModalName, closeCurrent) {
+    // Get the currently open modal
+    var currentModal = document.querySelector(".modal.show");
+
+    if (closeCurrent && currentModal) {
+        // If closing the current modal is needed and a modal is open
+        var modal = new bootstrap.Modal(currentModal);
+        modal.hide();
+    }
+
+    if (newModalName) {
+        // If opening a new modal is needed
+        var newClientModal = document.getElementById(newModalName);
+
+        if (newClientModal) {
+            var modal = new bootstrap.Modal(newClientModal);
+            modal.show();
+        }
+    }
+}
+
+
+```
 function modalControl(newModalName, closeCurrent) {
     // 获取当前打开的模态弹框
     var currentModal = document.querySelector(".modal.show");
@@ -10,7 +34,7 @@ function modalControl(newModalName, closeCurrent) {
             var modal = new bootstrap.Modal(currentModal);
             setTimeout(function () {
                 modal.hide();
-            }, 100); // 100毫秒延迟
+            }, 100); // 100毫秒延迟 您可以根据需要进行调整
         }
     }
     if (newModalName) {
@@ -24,7 +48,7 @@ function modalControl(newModalName, closeCurrent) {
         }, 100);
     }
 }
-
+```
 
 //客户档案收集
 function newClient() {
@@ -64,6 +88,7 @@ function newClient() {
 function newCase() {
     var trialLevelSelect = document.getElementById('trial_level');
     var cPermissionSelect = document.getElementById('c_permission');
+
     if (trialLevelSelect.value === "选择审级" || cPermissionSelect.value === "选择授权选项") {
         alert('请选择有效的审级和授权选项！');
     } else {
@@ -145,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    //文件上传功能
+//文件上传功能
 document.getElementById('uploadFileForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
