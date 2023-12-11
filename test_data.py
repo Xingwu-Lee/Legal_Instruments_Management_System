@@ -40,7 +40,7 @@ def view_data():
 
             print("\nCases:")
             for case in cases:
-                print(f"Case ID: {case.id}, Case Number: {case.case_number}")
+                print(f"Client Name: {case.client_name}, Lawyer Name:{case.lawyer_name}, Case Number: {case.case_number}")
 
 if __name__ == "__main__":
     action = input("Enter action (create, delete, view): ").strip().lower()

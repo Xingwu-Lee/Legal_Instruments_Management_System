@@ -108,14 +108,15 @@ def newClient():
 @app.route('/newCase', methods=['POST'])
 def newCase():
     data = request.get_json()
-    existing_case = Case.query.filter_by(name=data['case_number']).first()
+    existing_case = Case.query.filter_by(case_number=data['case_number']).first()
     # 调试用
     print("Received data:", data)
     if existing_case:
         return jsonify({'message': '案件已存在'}), 409
-    case_id = str(uuid.uuid4()) #id类型已删，下次更新数据库删除这一行
-    new_case = Case(id=case_id, client_name=data['client_name'], client_id=data['client_citizen_id'],
-                    lawyer_name=data['user_name'], lawyer_id=data['user_id'], case_number=data['case_number'],
+    lawyer_id = session['user_id']  # 假设律师ID从会话中获取
+    lawyer_name = User.query.get(session['user_id']).name  # 假设从数据库中获取律师姓名
+    new_case = Case(client_name=data['client_name'], client_id=data['client_id'],
+                    lawyer_name=lawyer_name, lawyer_id=lawyer_id, case_number=data['case_number'],
                     opposite_party_name=data['opposite_party_name'], case_type=data['case_type'], court=data['court'],
                     trial_level=data['trial_level'], dispute_subject=data['dispute_subject'],
                     agency_fee=data['agency_fee'], c_permission=data['c_permission'])

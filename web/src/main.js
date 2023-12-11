@@ -62,31 +62,37 @@ function newClient() {
 
 //案件收集
 function newCase() {
+    // 防止表单默认提交行为
+    //event.preventDefault();
     var trialLevelSelect = document.getElementById('trial_level');
     var cPermissionSelect = document.getElementById('c_permission');
+
     if (trialLevelSelect.value === "选择审级" || cPermissionSelect.value === "选择授权选项") {
         alert('请选择有效的审级和授权选项！');
     } else {
-         //var client_citizen_id = document.getElementById('client_citizen_id').value;
-    var opposite_party_name = document.getElementById ('opposite_party_name').value,
+    var clientName = document.getElementById('clientNameSearchInput').value;
+        clientId = document.getElementById('clientIdDisplay').textContent.replace('客户身份证：', '').trim();
+        opposite_party_name = document.getElementById ('opposite_party_name').value,
         case_number = document.getElementById ('case_number').value,
         case_type = document.getElementById ('case_type').value, court = document.getElementById ('court').value,
         dispute_subject = document.getElementById ('dispute_subject').value,
         agency_fee = document.getElementById ('agency_fee').value,
-        trial_level = document.getElementById ('trial_level').value, c_permission = document.getElementById ('c_permission').value,
-        client_name = client.name, client_citizen_id = client.citizen_id, user_name = user.name, user_id = user.id;
+        trial_level = document.getElementById ('trial_level').value, c_permission = document.getElementById ('c_permission').value;
+        //user_name = user.name, user_id = user.id;
         // AJAX request to Flask backend for registration
          fetch (BASE_URL + '/newCase', {
              method: 'POST',
              headers: {
                  'Content-Type': 'application/json',
              },
+             
              body: JSON.stringify ({
-                 client_name: client_name, client_citizen_id: client_citizen_id,
-                 opposite_party_name: opposite_party_name, user_name: user_name, user_id: user_id,
+                 client_name: clientName, client_id: clientId,
+                  opposite_party_name: opposite_party_name, 
                  case_number: case_number, case_type: case_type, court: court,
                  dispute_subject: dispute_subject, agency_fee: agency_fee,
                  trial_level: trial_level, c_permission: c_permission}),
+                     //user_name: user_name, user_id: user_id,
          })
              .then (response => {
                  if (response.status === 201) {
@@ -102,7 +108,7 @@ function newCase() {
                      });
                  }
              });
-     }
+      }
 }
 
 //实时客户名搜索实现
@@ -230,8 +236,6 @@ function updateClient() {
     });
 }
 
-
-
     //文件上传功能
 document.getElementById('uploadFileForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -299,3 +303,42 @@ function deleteFile(fileId) {
         console.error('Error:', error);
     });
 }
+
+
+```
+//身份证信息提取
+function extractIDCardInfo(idCard) {
+    // 检查身份证号码长度是否合法
+    if (idCard.length !== 18) {
+      return "身份证号码长度不合法";
+    }
+  
+    // 提取出生年月日
+    const year = idCard.substring(6, 10);
+    const month = idCard.substring(10, 12);
+    const day = idCard.substring(12, 14);
+    const birthday = year + "-" + month + "-" + day;
+  
+    // 提取性别
+    const genderCode = idCard.substring(16, 17);
+    const gender = parseInt(genderCode) % 2 === 0 ? "女" : "男";
+  
+    // 提取籍贯（前6位）
+    const nativePlace = idCard.substring(0, 6);
+  
+    // 计算年龄
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - parseInt(year);
+  
+    return {
+      birthday,
+      age,
+      gender,
+      nativePlace,
+    };
+  }
+  
+  const idCard = "身份证号码"; // 请替换为实际的身份证号码
+  const info = extractIDCardInfo(idCard);
+  console.log(info);  
+```
