@@ -167,7 +167,7 @@
               </div>
           </div>
       </div>
-    <div id="new-caseModal" aria-hidden="true" aria-labelledby="new-caseModalLabel" class="modal fade"
+    <div id="new-caseModal" aria-hidden="true" aria-labelledby="new-caseModalLabel" class="modal fade modal-lg"
     data-bs-backdrop="static"  tabindex="-1">
                    <div class="modal-dialog">
                      <div class="modal-content">
@@ -184,44 +184,56 @@
                                      <div class="dropdown-menu" aria-labelledby="clientNameSearchInput">
                                          <!-- 查询结果将在这里显示 -->
                                      </div>
-                                         <div id="userIdDisplay"></div> <!-- 用于显示客户身份证的区域 -->
+                                         <div id="clientIdDisplay"></div> <!-- 用于显示客户身份证的区域 -->
                                  </div>
                                 </form>
                                 <label class="col text-body">或者</label>
                                 <button class="col-btn btn-primary" onclick="modalControl('new-clientModal', false)">新建客户档案</button>
                             </div>
-                           <div class="form-group mb-3">
-                             <label for="opposite_party_name" class="col-form-label text-body">被告名称</label>
+                           <div class="align-items-center d-flex p-2 mb-3">
+                             <label for="opposite_party_name" class="form-label mx-2 text-body">
+                              <span class="d-inline-block" style="white-space: nowrap ;">被告名称:</span>
+                            </label>
                              <input type="text" class="form-control" id="opposite_party_name">
                            </div>
-                           <div class="form-group mb-3">
-                             <label for="case_number" class="col-form-label text-body">案件编号</label>
-                             <input type="text" class="form-control" id="case_number" >
-                           </div>
-                           <div class="form-group mb-3">
-                             <label for="case_type" class="col-form-label text-body">案由</label>
-                             <input type="text" class="form-control" id="case_type" >
-                           </div>
-                           <div class="form-group mb-3">
-                             <label for="court" class="col-form-label text-body">审理机关</label>
-                             <input type="text" class="form-control" id="court">
-                           </div>
-                           <div class="form-group mb-3">
-                             <label for="dispute_subject" class="col-form-label text-body">诉讼（仲裁）争议标的</label>
-                             <input type="text" class="form-control" id="dispute_subject">
-                           </div>
-                           <div class="form-group mb-3">
-                             <label for="agency_fee" class="col-form-label text-body">代理费用</label>
-                             <input type="text" class="form-control" id="agency_fee">
-                           </div>
+                           <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="case_number" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">案件编号:</span>
+                           </label>
+                            <input type="text" class="form-control" id="case_number">
+                          </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="case_type" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;案由:</span>
+                           </label>
+                            <input type="text" class="form-control" id="case_type">
+                          </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="court" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">审理机关:</span>
+                           </label>
+                            <input type="text" class="form-control" id="court">
+                          </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="agency_fee" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">代理费用:</span>
+                           </label>
+                            <input type="text" class="form-control" id="agency_fee">
+                          </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="dispute_subject" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">诉讼（仲裁）:</span>
+                           </label>
+                            <input type="text" class="form-control" id="dispute_subject">
+                          </div>
                             <div class="row-form-select mb-3">
-                             <select class="col-form-select form-select-lg" aria-label="Default select example" id="trial_level" name="trial_level">
+                             <select class="col-form-select form-select-lg mx-3" aria-label="Default select example" id="trial_level" name="trial_level">
                                  <option selected>选择审级</option>
                                <option value="1">一审</option>
                                <option value="2">二审</option>
                                <option value="3">三审</option>
                              </select>
-                             <select class="col-form-select form-select-lg" aria-label="Default select example" id="c_permission" name="c_permission">
+                             <select class="col-form-select form-select-lg mx-3" aria-label="Default select example" id="c_permission" name="c_permission">
                                  <option selected>选择授权选项</option>
                                  <option value="1">一级</option>
                                  <option value="2">二级</option>
@@ -242,7 +254,7 @@
                      </div>
                    </div>
                  </div>
-    <div id="new-clientModal" aria-hidden="true" aria-labelledby="new-clientModalLabel" class="modal fade"
+    <div id="new-clientModal" aria-hidden="true" aria-labelledby="new-clientModalLabel" class="modal fade modal-lg"
        data-bs-backdrop="static" tabindex="-1">
                    <div class="modal-dialog">
                      <div class="modal-content">
@@ -251,31 +263,49 @@
                        </div>
                        <div class="modal-body">
                          <form>
-                           <div class="form-group mb-3">
-                             <label for="clientName" class="col-form-label text-body">客户名</label>
-                             <input type="text" class="form-control" id="clientName">
-                           </div>
-                           <div class="form-group mb-3">
-                             <label for="clientPhone" class="col-form-label text-body">手机号</label>
-                             <input type="text" class="form-control" id="clientPhone">
-                           </div>
-                           <div class="form-group mb-3">
-                             <label for="clientEmail" class="col-form-label text-body">邮箱</label>
-                             <input type="text" class="form-control" id="clientEmail">
-                           </div>
-                           <div class="form-group mb-3">
-                             <label for="citizen_id" class="col-form-label text-body">身份证号</label>
-                             <input type="text" class="form-control" id="citizen_id" >
-                           </div>
-                           <div class="form-group mb-3">
-                             <label for="postal_code" class="col-form-label text-body">邮政编码</label>
-                             <input type="text" class="form-control" id="postal_code">
-                           </div>
-                           <div class="form-group mb-3">
-                             <label for="address" class="col-form-label text-body">住址</label>
-                             <input type="text" class="form-control" id="address">
-                           </div>
+                           <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="clientName" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;客户名:</span>
+                           </label>
+                            <input type="text" class="form-control" id="clientName">
+                          </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="clientPhone" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;手机号:</span>
+                           </label>
+                            <input type="text" class="form-control" id="clientPhone">
+                          </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="clientEmail" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;邮箱:</span>
+                           </label>
+                            <input type="text" class="form-control" id="clientEmail">
+                          </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="citizen_id" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">身份证号:</span>
+                           </label>
+                            <input type="text" class="form-control" id="citizen_id">
+                          </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="postal_code" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">邮政编码:</span>
+                           </label>
+                            <input type="text" class="form-control" id="postal_code">
+                          </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="address" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;住址:</span>
+                           </label>
+                            <input type="text" class="form-control" id="address">
+                          </div>
                          </form>
+                         <div class="align-items-center d-flex p-2 mb-3">
+                          <label for="clientName" class="form-label mx-2 text-body">
+                           <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;或者上传文件提取用户信息:</span>
+                         </label>
+                          <button class="btn btn-primary mb-3 mx-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal">上传文件</button>
+                        </div>
                        </div>
                        <div class="modal-footer">
                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>

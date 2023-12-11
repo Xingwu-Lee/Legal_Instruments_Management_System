@@ -2,53 +2,7 @@
 const BASE_URL = 'http://127.0.0.1:8080';
 
 
-function modalControl(newModalName, closeCurrent) {
-    // 获取当前打开的模态弹框
-    try {
-        var currentModal = document.querySelector(".modal.show");
-        if (closeCurrent && currentModal) {
-            var modal = new bootstrap.Modal(currentModal);
-            modal.hide();
-        }
-        
-        if (newModalName) {
-            var newClientModal = document.getElementById(newModalName);
-            if (newClientModal) {
-                var modal = new bootstrap.Modal(newClientModal);
-                modal.show();
-            } else {
-                console.error("Modal with ID '" + newModalName + "' not found.");
-            }
-        }
-    } catch (error) {
-        console.error("An error occurred:", error);
-    }
-}
-```
-function modalControl(newModalName, closeCurrent) {
-    // 获取当前打开的模态弹框
-    var currentModal = document.querySelector(".modal.show");
-    if (closeCurrent) {
-        // 如果需要关闭当前模态弹框
-        if (currentModal) {
-            var modal = new bootstrap.Modal(currentModal);
-            setTimeout(function () {
-                modal.hide();
-            }, 100); // 100毫秒延迟，您可以根据需要进行调整
-        }
-    }
-    if (newModalName) {
-        // 如果需要打开新的模态弹框
-        setTimeout(function () {
-            var newClientModal = document.getElementById(newModalName);
-            if (newClientModal) {
-                var modal = new bootstrap.Modal(newClientModal);
-                modal.show();
-            }
-        }, 50);
-    }
-}
-```
+
 //客户档案收集
 function newClient() {
     var name = document.getElementById('clientName').value;
@@ -87,7 +41,6 @@ function newClient() {
 function newCase() {
     var trialLevelSelect = document.getElementById('trial_level');
     var cPermissionSelect = document.getElementById('c_permission');
-
     if (trialLevelSelect.value === "选择审级" || cPermissionSelect.value === "选择授权选项") {
         alert('请选择有效的审级和授权选项！');
     } else {
@@ -154,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         link.addEventListener('click', function(e) {
                             e.preventDefault();
                             searchInput.value = client.name;
-                            userIdDisplay.textContent = '客户身份证：' + client.citizen_id;
+                            clientIdDisplay.textContent = '客户身份证：' + client.citizen_id;
                             resultsDropdown.innerHTML = '';
                             resultsDropdown.style.display = 'none';
                         });
@@ -169,72 +122,70 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-
     //文件上传功能
-    document.getElementById('uploadFileForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-    
-        var formData = new FormData();
-        var fileInput = document.getElementById('fileInput');
-        var fileDescription = document.getElementById('fileDescription').value;
-    
-        formData.append('file', fileInput.files[0]);
-        formData.append('description', fileDescription);
-    
-        fetch('/upload_file', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            // 可以在此处添加代码来处理上传后的响应，如刷新文件列表
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-    
-    //文件列表加载
-    document.addEventListener('DOMContentLoaded', function() {
-        fetch('/get_file_list')
-        .then(response => response.json())
-        .then(files => {
-            var tableBody = document.querySelector('#file-management table tbody');
-            tableBody.innerHTML = ''; // 清空现有内容
-            files.forEach((file, index) => {
-                var row = `<tr>
-                            <th scope="row">${index + 1}</th>
-                            <td>${file.name}</td>
-                            <td>${file.description}</td>
-                            <td>${file.uploadDate}</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary">预览</button>
-                                <a href="${file.downloadUrl}" class="btn btn-sm btn-success" download>下载</a>
-                                <button class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">删除</button>
-                            </td>
-                           </tr>`;
-                tableBody.innerHTML += row;
-            });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-    
+document.getElementById('uploadFileForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-    function deleteFile(fileId) {
-        fetch(`/delete_file/${fileId}`, { method: 'DELETE' })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            // 删除成功后重新加载文件列表
-        })
-        .catch(error => {
-            console.error('Error:', error);
+    var formData = new FormData();
+    var fileInput = document.getElementById('fileInput');
+    var fileDescription = document.getElementById('fileDescription').value;
+
+    formData.append('file', fileInput.files[0]);
+    formData.append('description', fileDescription);
+
+    fetch('/upload_file', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        // 可以在此处添加代码来处理上传后的响应，如刷新文件列表
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+//文件列表加载
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/get_file_list')
+    .then(response => response.json())
+    .then(files => {
+        var tableBody = document.querySelector('#file-management table tbody');
+        tableBody.innerHTML = ''; // 清空现有内容
+        files.forEach((file, index) => {
+            var row = `<tr>
+                        <th scope="row">${index + 1}</th>
+                        <td>${file.name}</td>
+                        <td>${file.description}</td>
+                        <td>${file.uploadDate}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">预览</button>
+                            <a href="${file.downloadUrl}" class="btn btn-sm btn-success" download>下载</a>
+                            <button class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">删除</button>
+                        </td>
+                        </tr>`;
+            tableBody.innerHTML += row;
         });
-    }
-    
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+
+function deleteFile(fileId) {
+    fetch(`/delete_file/${fileId}`, { method: 'DELETE' })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        // 删除成功后重新加载文件列表
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
