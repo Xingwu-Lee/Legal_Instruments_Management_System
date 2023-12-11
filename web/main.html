@@ -23,8 +23,8 @@
                         新建
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#new-caseModal">案件</a></li>
-                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#new-clientModal">客户档案</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#newCaseModal">案件</a></li>
+                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#newClientModal">客户档案</a></li>
                         <li><a class="dropdown-item" href="#">合同</a></li>
                     </ul>
                 </li>
@@ -102,7 +102,7 @@
                   <div id="case-management" class="container tab-pane active"><br>
                       <!-- 案件管理相关内容 -->
                       <h2>案件管理</h2>
-                      <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#new-caseModal">新建案件</button>
+                      <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newCaseModal">新建案件</button>
                       <table class="table">
                           <thead>
                               <tr>
@@ -123,7 +123,7 @@
                   <div id="client-management" class="container tab-pane fade"><br>
                       <!-- 客户管理相关内容 -->
                       <h2>客户管理</h2>
-                      <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#new-clientModal">新增客户</button>
+                      <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newClientModal">新增客户</button>
                       <table class="table">
                           <thead>
                               <tr>
@@ -143,36 +143,13 @@
           </main>
       </div>
     </div>
-        <!-- 文件上传模态框 -->
-      <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <h5 class="modal-title" id="uploadFileModalLabel">上传文件</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                      <form id="uploadFileForm">
-                          <div class="mb-3">
-                              <label for="fileInput" class="form-label">选择文件</label>
-                              <input class="form-control" type="file" id="fileInput">
-                          </div>
-                          <div class="mb-3">
-                              <label for="fileDescription" class="form-label">文件描述</label>
-                              <textarea class="form-control" id="fileDescription" rows="3"></textarea>
-                          </div>
-                          <button type="submit" class="btn btn-primary">上传</button>
-                      </form>
-                  </div>
-              </div>
-          </div>
-      </div>
-    <div id="new-caseModal" aria-hidden="true" aria-labelledby="new-caseModalLabel" class="modal fade modal-lg"
+    <!-- 新建案件模态框 -->
+    <div id="newCaseModal" aria-hidden="true" aria-labelledby="newCaseModalLabel" class="modal fade modal-lg"
     data-bs-backdrop="static"  tabindex="-1">
                    <div class="modal-dialog">
                      <div class="modal-content">
                        <div class="modal-header">
-                         <h5 class="modal-title text-body" id="new-caseModalLabel">新建案件</h5>
+                         <h5 class="modal-title text-body" id="newCaseModalLabel">新建案件</h5>
                        </div>
                        <div class="modal-body">
                          <form>
@@ -188,7 +165,7 @@
                                  </div>
                                 </form>
                                 <label class="col text-body">或者</label>
-                                <button class="col-btn btn-primary" onclick="modalControl('new-clientModal', false)">新建客户档案</button>
+                                <button class="col-btn btn-primary" onclick="modalControl('newClientModal', false)">新建客户档案</button>
                             </div>
                            <div class="align-items-center d-flex p-2 mb-3">
                              <label for="opposite_party_name" class="form-label mx-2 text-body">
@@ -254,12 +231,13 @@
                      </div>
                    </div>
                  </div>
-    <div id="new-clientModal" aria-hidden="true" aria-labelledby="new-clientModalLabel" class="modal fade modal-lg"
+    <!-- 新建客户档案模态框 -->
+    <div id="newClientModal" aria-hidden="true" aria-labelledby="newClientModalLabel" class="modal fade modal-lg"
        data-bs-backdrop="static" tabindex="-1">
                    <div class="modal-dialog">
                      <div class="modal-content">
                        <div class="modal-header">
-                         <h5 class="modal-title text-body" id="new-clientModalLabel">新建客户档案</h5>
+                         <h5 class="modal-title text-body" id="newClientModalLabel">新建客户档案</h5>
                        </div>
                        <div class="modal-body">
                          <form>
@@ -314,6 +292,63 @@
                      </div>
                    </div>
                  </div>
+    <!-- 客户信息编辑模态框 -->
+    <div id="editClientModal" class="modal fade modal-lg" tabindex="-1" aria-labelledby="editClientModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="editClientModalLabel">编辑客户信息</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form id="edit-client-form">
+                      <input type="hidden" id="edit-client-id">
+                      <div class="align-items-center d-flex p-2 mb-3">
+                        <label for="edit-clientName" class="form-label mx-2 text-body">
+                         <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;客户名:</span>
+                       </label>
+                        <input type="text" class="form-control" id="edit-clientName">
+                      </div>
+                      <div class="align-items-center d-flex p-2 mb-3">
+                        <label for="edit-clientPhone" class="form-label mx-2 text-body">
+                         <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;手机号:</span>
+                       </label>
+                        <input type="text" class="form-control" id="edit-clientPhone">
+                      </div>
+                      <div class="align-items-center d-flex p-2 mb-3">
+                        <label for="edit-clientEmail" class="form-label mx-2 text-body">
+                         <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;邮箱:</span>
+                       </label>
+                        <input type="text" class="form-control" id="edit-clientEmail">
+                      </div>
+                      <div class="align-items-center d-flex p-2 mb-3">
+                        <label for="edit-citizen_id" class="form-label mx-2 text-body">
+                         <span class="d-inline-block" style="white-space: nowrap ;">身份证号:</span>
+                       </label>
+                        <input type="text" class="form-control" id="edit-citizen_id">
+                      </div>
+                      <div class="align-items-center d-flex p-2 mb-3">
+                        <label for="edit-postal_code" class="form-label mx-2 text-body">
+                         <span class="d-inline-block" style="white-space: nowrap ;">邮政编码:</span>
+                       </label>
+                        <input type="text" class="form-control" id="edit-postal_code">
+                      </div>
+                      <div class="align-items-center d-flex p-2 mb-3">
+                        <label for="edit-address" class="form-label mx-2 text-body">
+                         <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;住址:</span>
+                       </label>
+                        <input type="text" class="form-control" id="edit-address">
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                  <button type="button" class="btn btn-primary" onclick="updateClient()">更新</button>
+              </div>
+          </div>
+      </div>
+  </div>
+    <!-- 个人信息编辑模态框 -->
     <div id="profileModal" class="modal fade" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
     <div class="modal-dialog">
     <div class="modal-content">
@@ -346,50 +381,30 @@
     </div>
     </div>
     </div>
-    <!-- 客户信息编辑模态框 -->
-    <div id="edit-clientModal" class="modal fade modal-lg" tabindex="-1" aria-labelledby="edit-clientModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="edit-clientModalLabel">编辑客户信息</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <form id="edit-client-form">
-                      <input type="hidden" id="edit-client-id">
-                      <div class="align-items-center d-flex p-2 mb-3">
-                          <label for="edit-clientName" class="form-label mx-2 text-body">客户名:</label>
-                          <input type="text" class="form-control" id="edit-clientName">
-                      </div>
-                      <div class="align-items-center d-flex p-2 mb-3">
-                          <label for="edit-clientPhone" class="form-label mx-2 text-body">手机号:</label>
-                          <input type="text" class="form-control" id="edit-clientPhone">
-                      </div>
-                      <div class="align-items-center d-flex p-2 mb-3">
-                          <label for="edit-clientEmail" class="form-label mx-2 text-body">邮箱:</label>
-                          <input type="text" class="form-control" id="edit-clientEmail">
-                      </div>
-                      <div class="align-items-center d-flex p-2 mb-3">
-                          <label for="edit-citizen_id" class="form-label mx-2 text-body">身份证号:</label>
-                          <input type="text" class="form-control" id="edit-citizen_id">
-                      </div>
-                      <div class="align-items-center d-flex p-2 mb-3">
-                          <label for="edit-postal_code" class="form-label mx-2 text-body">邮政编码:</label>
-                          <input type="text" class="form-control" id="edit-postal_code">
-                      </div>
-                      <div class="align-items-center d-flex p-2 mb-3">
-                          <label for="edit-address" class="form-label mx-2 text-body">住址:</label>
-                          <input type="text" class="form-control" id="edit-address">
-                      </div>
-                  </form>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
-                  <button type="button" class="btn btn-primary" onclick="updateClient()">更新</button>
+    <!-- 文件上传模态框 -->
+    <div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="uploadFileModalLabel">上传文件</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <form id="uploadFileForm">
+                          <div class="mb-3">
+                              <label for="fileInput" class="form-label">选择文件</label>
+                              <input class="form-control" type="file" id="fileInput">
+                          </div>
+                          <div class="mb-3">
+                              <label for="fileDescription" class="form-label">文件描述</label>
+                              <textarea class="form-control" id="fileDescription" rows="3"></textarea>
+                          </div>
+                          <button type="submit" class="btn btn-primary">上传</button>
+                      </form>
+                  </div>
               </div>
           </div>
       </div>
-  </div>
   
     <footer class="bg-light text-center text-lg-start">
       <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">

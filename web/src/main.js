@@ -199,7 +199,7 @@ function editClient(clientId) {
         document.getElementById('edit-postal_code').value = client.postal_code;
         document.getElementById('edit-address').value = client.address;
 
-        var modal = new bootstrap.Modal(document.getElementById('edit-clientModal'));
+        var modal = new bootstrap.Modal(document.getElementById('editClientModal'));
         modal.show();
     });
 }
