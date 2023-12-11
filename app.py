@@ -133,6 +133,47 @@ def searchClients():
     result = [{'citizen_id': client.citizen_id, 'name': client.name} for client in clients]
     return jsonify(result)
 
+@app.route('/get_clients')
+def get_clients():
+    clients = Client.query.all()
+    client_list = [{'id': c.id, 'name': c.name, 'phone': c.phone, 'citizen_id': c.citizen_id} for c in clients]
+    return jsonify(client_list)
+
+@app.route('/delete_client/<client_id>', methods=['DELETE'])
+def delete_client(client_id):
+    client = Client.query.get(client_id)
+    if client:
+        db.session.delete(client)
+        db.session.commit()
+        return jsonify({'message': '客户删除成功'})
+    return jsonify({'message': '客户不存在'}), 404
+
+
+#填充客户编辑表单
+@app.route('/get_client/<client_id>')
+def get_client(client_id):
+    client = Client.query.get(client_id)
+    if client:
+        client_data = {'id': client.id, 'name': client.name, 'phone': client.phone, 'citizen_id': client.citizen_id, 'address': client.address, 'email': client.email, 'postal_code': client.postal_code}
+        return jsonify(client_data)
+    return jsonify({'message': '客户不存在'}), 404
+
+@app.route('/update_client/<client_id>', methods=['PUT'])
+def update_client(client_id):
+    data = request.get_json()
+    client = Client.query.get(client_id)
+    if client:
+        client.name = data['name']
+        client.phone = data['phone']
+        client.email = data['email']
+        client.citizen_id = data['citizen_id']
+        client.postal_code = data['postal_code']
+        client.address = data['address']
+        db.session.commit()
+        return jsonify({'message': '客户信息已更新'})
+    return jsonify({'message': '客户不存在'}), 404
+
+
 # 路由处理文件上传
 @app.route('/upload_file', methods=['POST'])
 def upload_file():
@@ -153,6 +194,7 @@ def upload_file():
 
         return jsonify({'message': '文件上传成功', 'url': file_url})
     return jsonify({'message': '没有文件上传'}), 400
+
 
 @app.route('/get_file_list')
 def get_file_list():

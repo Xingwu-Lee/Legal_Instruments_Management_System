@@ -88,12 +88,12 @@
     
               <!-- 选项卡切换案件管理和客户管理 -->
               <ul class="nav nav-tabs">
-                  <li class="nav-item">
-                      <a class="nav-link active text-body" data-bs-toggle="tab" href="#case-management">案件管理</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link text-body" data-bs-toggle="tab" href="#client-management">客户管理</a>
-                  </li>
+                <li class="nav-item">
+                  <a class="nav-link active text-body" data-bs-toggle="tab" href="#case-management">案件管理</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link  text-body" data-bs-toggle="tab" href="#client-management">客户管理</a>
+                </li>
               </ul>
     
               <!-- 选项卡内容 -->
@@ -129,14 +129,14 @@
                               <tr>
                                   <th scope="col">#</th>
                                   <th scope="col">客户名</th>
-                                  <th scope="col">联系方式</th>
-                                  <th scope="col">邮箱</th>
+                                  <th scope="col">手机号</th>
+                                  <th scope="col">身份证号</th>
                                   <th scope="col">操作</th>
                               </tr>
                           </thead>
-                          <tbody>
-                              <!-- 客户列表项 -->
-                          </tbody>
+                          <tbody id="client-list">
+                            <!-- 动态生成的客户列表项将被放置在这里 -->
+                        </tbody>
                       </table>
                   </div>
               </div>
@@ -346,7 +346,51 @@
     </div>
     </div>
     </div>
-    
+    <!-- 客户信息编辑模态框 -->
+    <div id="edit-clientModal" class="modal fade modal-lg" tabindex="-1" aria-labelledby="edit-clientModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="edit-clientModalLabel">编辑客户信息</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form id="edit-client-form">
+                      <input type="hidden" id="edit-client-id">
+                      <div class="align-items-center d-flex p-2 mb-3">
+                          <label for="edit-clientName" class="form-label mx-2 text-body">客户名:</label>
+                          <input type="text" class="form-control" id="edit-clientName">
+                      </div>
+                      <div class="align-items-center d-flex p-2 mb-3">
+                          <label for="edit-clientPhone" class="form-label mx-2 text-body">手机号:</label>
+                          <input type="text" class="form-control" id="edit-clientPhone">
+                      </div>
+                      <div class="align-items-center d-flex p-2 mb-3">
+                          <label for="edit-clientEmail" class="form-label mx-2 text-body">邮箱:</label>
+                          <input type="text" class="form-control" id="edit-clientEmail">
+                      </div>
+                      <div class="align-items-center d-flex p-2 mb-3">
+                          <label for="edit-citizen_id" class="form-label mx-2 text-body">身份证号:</label>
+                          <input type="text" class="form-control" id="edit-citizen_id">
+                      </div>
+                      <div class="align-items-center d-flex p-2 mb-3">
+                          <label for="edit-postal_code" class="form-label mx-2 text-body">邮政编码:</label>
+                          <input type="text" class="form-control" id="edit-postal_code">
+                      </div>
+                      <div class="align-items-center d-flex p-2 mb-3">
+                          <label for="edit-address" class="form-label mx-2 text-body">住址:</label>
+                          <input type="text" class="form-control" id="edit-address">
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                  <button type="button" class="btn btn-primary" onclick="updateClient()">更新</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  
     <footer class="bg-light text-center text-lg-start">
       <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
           © 2023 法律文书管理系统

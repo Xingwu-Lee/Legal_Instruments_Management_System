@@ -145,6 +145,93 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
+//加载客户列表
+document.addEventListener('DOMContentLoaded', function() {
+    fetch(BASE_URL + '/get_clients')
+    .then(response => response.json())
+    .then(clients => {
+        var clientList = document.getElementById('client-list');
+        clientList.innerHTML = '';
+        clients.forEach((client, index) => {
+            var row = `<tr>
+                        <th scope="row">${index + 1}</th>
+                        <td>${client.name}</td>
+                        <td>${client.phone}</td>
+                        <td>${client.citizen_id}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editClient('${client.id}')">编辑</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteClient('${client.id}')">删除</button>
+                        </td>
+                        </tr>`;
+            clientList.innerHTML += row;
+        });
+    });
+});
+
+
+//删除客户
+function deleteClient(clientId) {
+    if (!confirm("确定要删除该客户吗？")) {
+        return;
+    }
+    fetch(BASE_URL + '/delete_client/' + clientId, { method: 'DELETE' })
+    .then(response => {
+        if(response.ok) {
+            alert('客户删除成功');
+            location.reload(); // 重新加载页面以更新客户列表
+        } else {
+            alert('客户删除失败');
+        }
+    });
+}
+
+
+// 编辑客户信息
+function editClient(clientId) {
+    fetch(BASE_URL + '/get_client/' + clientId)
+    .then(response => response.json())
+    .then(client => {
+        document.getElementById('edit-client-id').value = client.id;
+        document.getElementById('edit-clientName').value = client.name;
+        document.getElementById('edit-clientPhone').value = client.phone;
+        document.getElementById('edit-clientEmail').value = client.email;
+        document.getElementById('edit-citizen_id').value = client.citizen_id;
+        document.getElementById('edit-postal_code').value = client.postal_code;
+        document.getElementById('edit-address').value = client.address;
+
+        var modal = new bootstrap.Modal(document.getElementById('edit-clientModal'));
+        modal.show();
+    });
+}
+
+function updateClient() {
+    var clientId = document.getElementById('edit-client-id').value;
+    var name = document.getElementById('edit-clientName').value;
+    var phone = document.getElementById('edit-clientPhone').value;
+    var email = document.getElementById('edit-clientEmail').value;
+    var citizen_id = document.getElementById('edit-citizen_id').value;
+    var postal_code = document.getElementById('edit-postal_code').value;
+    var address = document.getElementById('edit-address').value;
+
+    fetch(BASE_URL + '/update_client/' + clientId, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, phone, email, citizen_id, postal_code, address })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('客户信息更新成功');
+            location.reload();
+        } else {
+            alert('客户信息更新失败');
+        }
+    });
+}
+
+
+
     //文件上传功能
 document.getElementById('uploadFileForm').addEventListener('submit', function(e) {
     e.preventDefault();
