@@ -1,0 +1,36 @@
+@startuml
+
+actor User as "Lawyer/Legal Assistant"
+
+package "Web Interface" {
+    frame "Case Management UI" as UI {
+        (Select Case)
+        (Create Case)
+        (Update Case)
+        (Delete Case)
+    }
+}
+
+package "Backend" {
+    frame "Case Controller" as Controller {
+        [Process Case Selection]
+        [Create Case in System]
+        [Update Case Details]
+        [Delete Case from System]
+    }
+}
+
+package "Database" {
+    database "Case Database" as DB {
+        (Case Records)
+    }
+}
+
+User -> UI : interacts \n
+UI -> User : displays outcomes
+UI -> Controller : sends user actions
+Controller -> DB : queries & updates
+DB -> Controller : responds with data
+Controller -> UI : sends results
+
+@enduml

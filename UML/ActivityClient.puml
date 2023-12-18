@@ -1,0 +1,13 @@
+@startuml
+start
+:Log in as User;
+:Access Client Management;
+repeat :Select Action;
+-  (Create New Client)
+-  (Update Existing Client)
+-  (Delete Client)
+backward: Action Selected;
+repeat while (More Actions?) is (Yes)
+-> [No] :Log out;
+stop
+@enduml

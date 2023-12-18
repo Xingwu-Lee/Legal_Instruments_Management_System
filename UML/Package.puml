@@ -1,0 +1,22 @@
+@startuml
+package "User Management" {
+   class User
+   class Authentication
+}
+
+package "Client Management" {
+   class Client
+}
+
+package "Case Management" {
+   class Case
+}
+
+package "Document Management" {
+   class Document
+}
+
+package "Search Functionality" {
+   class Search
+}
+@enduml

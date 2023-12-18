@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+actor User as "Lawyer/Legal Assistant/Admin"
+actor "System Administrator"
+
+rectangle "Smart Management System for Legal Instruments" {
+
+  User --> (User Registration)
+  User --> (User Login)
+  User --> (Manage Client Profiles)
+  User --> (Manage Cases)
+  User --> (Search for Clients)
+  User --> (Document Upload and Management)
+  User --> (Generate Legal Instruments)
+  User --> (View and Generate Reports)
+
+  "System Administrator" --> (System Configuration)
+  "System Administrator" --> (Database Backup and Restore)
+  "System Administrator" --> (Security Management)
+
+}
+@enduml

@@ -1,0 +1,56 @@
+@startuml
+class User {
+   -userID: int
+   -username: String
+   -passwordHash: String
+   -salt: String
+   -role: String
+   -phone: String
+   +login()
+   +logout()
+   +register()
+   +updateProfile()
+}
+
+class Client {
+   -clientID: int
+   -name: String
+   -phone: String
+   -email: String
+   -citizenID: String
+   -postalCode: String
+   -address: String
+   +createClient()
+   +updateClient()
+   +deleteClient()
+}
+
+class Case {
+   -caseID: int
+   -caseNumber: String
+   -clientName: String
+   -lawyerName: String
+   -caseType: String
+   -court: String
+   -trialLevel: String
+   -disputeSubject: String
+   -agencyFee: double
+   +createCase()
+   +updateCase()
+   +deleteCase()
+}
+
+class Document {
+   -documentID: int
+   -name: String
+   -url: String
+   -description: String
+   -uploadDate: Date
+   +uploadDocument()
+   +deleteDocument()
+}
+
+User "1" -- "*" Client : has >
+User "1" -- "*" Case : manages >
+Case "1" -- "*" Document : contains >
+@enduml
