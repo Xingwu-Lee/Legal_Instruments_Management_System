@@ -8,8 +8,6 @@ from middlewares import check_empty_json
 import os
 import uuid
 
-#Test: This message is edited in windows ssh connected to a Macbook
-
 app = Flask(__name__, template_folder='web', static_folder='web/src')
 #CORS(app, supports_credentials=True, expose_headers=['Content-Type', 'Authorization', 'X-Requested-With'])
 CORS(app, supports_credentials=True)
@@ -252,8 +250,6 @@ def manage_documents():
 '''
 
 '''
-
-
 @app.route('/user/<user_id>/files', methods=['GET', 'POST', 'PUT', 'DELETE'])
 @jwt_required()
 def user_files(user_id):
@@ -283,8 +279,6 @@ def create_case(user_id):
     db.session.commit()
 
     return jsonify({'message': 'New case created', 'case_id': new_case.id}), 201
-
-
 '''
 def generate_salt():
     # 在此函数中生成随机盐

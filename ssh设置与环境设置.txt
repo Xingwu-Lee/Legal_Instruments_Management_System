@@ -1,11 +1,14 @@
 生成密钥：legalsystem /xingwu
 MacBook ip：10.8.217.252(学校WiFi)
 	       172.20.10.3（手机热点）
+		inet 192.168.31.91 netmask 0xffffff00 broadcast 192.168.31.255
+		192.168.31.91
 
 在远程服务器上运行Flask后端，然后通过本地计算机访问该前端的步骤：
 Windows终端：ssh -L 8080:127.0.0.1:8080 Arthur@remote_server_ip
 
-
+非Pycharm连接后，1.终端输入：cd /Users/Arthur/Library/CloudStorage/OneDrive-个人/College/FYP/Legal_Instruments_Management_System
+2.然后输入app.py
 
 遇到flask_uploads相关问题：
 1.先pip install flask_uploads
