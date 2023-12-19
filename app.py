@@ -8,7 +8,6 @@ from middlewares import check_empty_json
 import os
 import uuid
 
-#Test: This message is edited in windows ssh connected to a Macbook
 
 app = Flask(__name__, template_folder='web', static_folder='web/src')
 #CORS(app, supports_credentials=True, expose_headers=['Content-Type', 'Authorization', 'X-Requested-With'])
