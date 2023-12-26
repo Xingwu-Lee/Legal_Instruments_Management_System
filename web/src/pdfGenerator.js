@@ -21,8 +21,6 @@ function createInput(inputId, inputType, name, required, placeholder = '') {
     return input;
 }
 
-
-
 function createTextArea(inputId, name, rows, cols, required) {
     var textarea = document.createElement('textarea');
     textarea.className = 'form-control';
@@ -92,9 +90,9 @@ function updateFormFields() {
         addFormField(formFieldsDiv, createLabel('date', '日期：'), createInput('date', 'date', 'date', true));
     }
 
-
 }
 let historyRecords = [];
+
 
 document.getElementById('pdfForm').addEventListener('submit', function (event) {
     event.preventDefault();
@@ -174,7 +172,8 @@ document.getElementById('pdfForm').addEventListener('submit', function (event) {
     var pdfViewer = document.getElementById('pdfViewer');
     pdfViewer.hidden = false;
 
-    fetch('http://localhost:5000/generate_pdf', {
+    //改为BASE_URL + '/newClient'的方式有bug，无法生成内容，初步估计是‘const BASE_URL = 'http://127.0.0.1:8080';’造成的
+    fetch('http://127.0.0.1:8080/generate_pdf', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
