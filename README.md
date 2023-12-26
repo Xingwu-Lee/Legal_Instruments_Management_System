@@ -1,7 +1,7 @@
 # Legal_Instruments_Management_System
-数据库代码放在database文件夹里
-信息安全和内容理解生成都放在server文件夹里
-
+数据库代码放在database文件夹里 <br>
+信息安全和内容理解生成都放在server文件夹里 <br>
+这个branch是给整合功能还有新功能测试的，成功之后会合并
 # 界面展示
 
 
