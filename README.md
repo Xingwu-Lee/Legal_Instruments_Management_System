@@ -1,4 +1,5 @@
 # Legal_Instruments_Management_System
+新功能以及其他功能的整合都在branch：‘New_function_test’里
 数据库代码放在database文件夹里
 信息安全和内容理解生成都放在server文件夹里
 
