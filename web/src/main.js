@@ -71,7 +71,7 @@ function newCase() {
         alert('请选择有效的审级和授权选项！');
     } else {
     var clientName = document.getElementById('clientNameSearchInput').value;
-        clientId = document.getElementById('clientIdDisplay').textContent.replace('客户身份证：', '').trim();
+        client_id = document.getElementById('clientIdDisplay').textContent.replace('客户身份证：', '').trim();
         opposite_party_name = document.getElementById ('opposite_party_name').value,
         case_number = document.getElementById ('case_number').value,
         case_type = document.getElementById ('case_type').value, court = document.getElementById ('court').value,
@@ -86,7 +86,7 @@ function newCase() {
              },
              
              body: JSON.stringify ({
-                 client_name: clientName, client_id: clientId,
+                 client_name: clientName, client_id: client_id,
                   opposite_party_name: opposite_party_name, 
                  case_number: case_number, case_type: case_type, court: court,
                  dispute_subject: dispute_subject, agency_fee: agency_fee,
@@ -175,11 +175,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //删除客户
-function deleteClient(clientId) {
+function deleteClient(client_id) {
     if (!confirm("确定要删除该客户吗？")) {
         return;
     }
-    fetch(BASE_URL + '/delete_client/' + clientId, { method: 'DELETE' })
+    fetch(BASE_URL + '/delete_client/' + client_id, { method: 'DELETE' })
     .then(response => {
         if(response.ok) {
             alert('客户删除成功');
@@ -193,8 +193,8 @@ function deleteClient(clientId) {
 
 // 编辑客户信息
 //获取客户信息
-function editClient(clientId) {
-    fetch(BASE_URL + '/get_client/' + clientId)
+function editClient(client_id) {
+    fetch(BASE_URL + '/get_client/' + client_id)
     .then(response => response.json())
     .then(client => {
         document.getElementById('edit-client-id').value = client.id;
@@ -211,7 +211,7 @@ function editClient(clientId) {
 }
 
 function updateClient() {
-    var clientId = document.getElementById('edit-client-id').value;
+    var client_id = document.getElementById('edit-client-id').value;
     var name = document.getElementById('edit-clientName').value;
     var phone = document.getElementById('edit-clientPhone').value;
     var email = document.getElementById('edit-clientEmail').value;
@@ -219,7 +219,7 @@ function updateClient() {
     var postal_code = document.getElementById('edit-postal_code').value;
     var address = document.getElementById('edit-address').value;
 
-    fetch(BASE_URL + '/update_client/' + clientId, {
+    fetch(BASE_URL + '/update_client/' + client_id, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
