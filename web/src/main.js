@@ -78,7 +78,6 @@ function newCase() {
         dispute_subject = document.getElementById ('dispute_subject').value,
         agency_fee = document.getElementById ('agency_fee').value,
         trial_level = document.getElementById ('trial_level').value, c_permission = document.getElementById ('c_permission').value;
-        //user_name = user.name, user_id = user.id;
         // AJAX request to Flask backend for registration
          fetch (BASE_URL + '/newCase', {
              method: 'POST',
@@ -193,6 +192,7 @@ function deleteClient(clientId) {
 
 
 // 编辑客户信息
+//获取客户信息
 function editClient(clientId) {
     fetch(BASE_URL + '/get_client/' + clientId)
     .then(response => response.json())
@@ -235,6 +235,100 @@ function updateClient() {
         }
     });
 }
+
+// Load case list
+document.addEventListener('DOMContentLoaded', function() {
+    fetch(BASE_URL + '/get_cases')
+    .then(response => response.json())
+    .then(cases => {
+        var caseList = document.getElementById('case-list');
+        caseList.innerHTML = '';
+        cases.forEach((caseItem, index) => {
+            var row = `<tr>
+                        <th scope="row">${index + 1}</th>
+                        <td>${caseItem.case_number}</td>
+                        <td>${caseItem.client_name}</td>
+                        <td>${caseItem.case_type}</td>
+                        <td>${caseItem.lawyer_name}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editCase('${caseItem.case_number}')">编辑</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCase('${caseItem.case_number}')">删除</button>
+                        </td>
+                        </tr>`;
+            caseList.innerHTML += row;
+        });
+    });
+});
+
+// Delete case
+function deleteCase(case_number) {
+    if (!confirm("确定要删除该案件吗？")) {
+        return;
+    }
+    fetch(BASE_URL + '/delete_case/' + case_number, { method: 'DELETE' })
+    .then(response => {
+        if(response.ok) {
+            alert('案件删除成功');
+            location.reload(); // Reload the page to update the case list
+        } else {
+            alert('案件删除失败');
+        }
+    });
+}
+
+// Edit case information
+function editCase(case_number) {
+    fetch(BASE_URL + '/get_case/' + case_number)
+    .then(response => response.json())
+    .then(caseData => {
+        document.getElementById('edit-opposite_party_name').value = caseData.opposite_party_name;
+        document.getElementById('edit-case_number').value = caseData.case_number;
+        document.getElementById('edit-case_type').value = caseData.case_type;
+        document.getElementById('edit-court').value = caseData.court;
+        document.getElementById('edit-agency_fee').value = caseData.agency_fee;
+        document.getElementById('edit-dispute_subject').value = caseData.dispute_subject;
+        document.getElementById('edit-trial_level').value = caseData.trial_level;
+        document.getElementById('edit-c_permission').value = caseData.c_permission;
+
+        // Assuming you have an edit modal with an ID 'editCaseModal'
+        var modal = new bootstrap.Modal(document.getElementById('editCaseModal'));
+        modal.show();
+
+        // Store the case ID in a hidden field or in a global variable for use in the update function
+        //document.getElementById('edit-case-id').value = case_number; // Assuming you have an input field with ID 'edit-case-id'
+    });
+}
+
+// Update case
+function updateCase() {
+    var opposite_party_name = document.getElementById('edit-opposite_party_name').value;
+    var case_number = document.getElementById('edit-case_number').value;
+    var case_type = document.getElementById('edit-case_type').value;
+    var court = document.getElementById('edit-court').value;
+    var agency_fee = document.getElementById('edit-agency_fee').value;
+    var dispute_subject = document.getElementById('edit-dispute_subject').value;
+    var trial_level = document.getElementById('edit-trial_level').value;
+    var c_permission = document.getElementById('edit-c_permission').value;
+
+    fetch(BASE_URL + '/update_case/' + case_number, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ opposite_party_name, case_number, case_type, court, agency_fee, dispute_subject, trial_level, c_permission })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('案件信息更新成功');
+            location.reload(); // Reload the page to update the case list
+        } else {
+            alert('案件信息更新失败');
+        }
+    });
+}
+
+
+
 
     //文件上传功能
 document.getElementById('uploadFileForm').addEventListener('submit', function(e) {

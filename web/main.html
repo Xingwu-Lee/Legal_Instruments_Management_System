@@ -69,7 +69,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                     <!-- 这里使用了循环来渲染每个文件的信息 -->
+                     <!-- 使用循环来渲染每个文件的信息 -->
                         {% for file in files %}
                         <tr>
                             <th scope="row">{{ loop.index }}</th>
@@ -108,13 +108,14 @@
                               <tr>
                                   <th scope="col">#</th>
                                   <th scope="col">案件编号</th>
+                                  <th scope="col">客户名</th>
                                   <th scope="col">案由</th>
-                                  <th scope="col">审理机关</th>
-                                  <th scope="col">状态</th>
+                                  <th scope="col">律师</th>
                                   <th scope="col">操作</th>
                               </tr>
                           </thead>
                           <tbody>
+                            <tbody id="case-list">
                               <!-- 案件列表项 -->
                           </tbody>
                       </table>
@@ -346,6 +347,69 @@
           </div>
       </div>
   </div>
+<!-- Case Edit Modal -->
+<div id="editCaseModal" class="modal fade modal-lg" tabindex="-1" aria-labelledby="editCaseModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="editCaseModalLabel">编辑案件信息</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="edit-case-form">
+                  <div class="align-items-center d-flex p-2 mb-3">
+                    <label for="edit-opposite_party_name" class="form-label mx-2 text-body">被告名称:</label>
+                    <input type="text" class="form-control" id="edit-opposite_party_name">
+                  </div>
+                  <div class="align-items-center d-flex p-2 mb-3">
+                    <label for="edit-case_number" class="form-label mx-2 text-body">案件编号:</label>
+                    <input type="text" class="form-control" id="edit-case_number">
+                  </div>
+                  <div class="align-items-center d-flex p-2 mb-3">
+                    <label for="edit-case_type" class="form-label mx-2 text-body">案由:</label>
+                    <input type="text" class="form-control" id="edit-case_type">
+                  </div>
+                  <div class="align-items-center d-flex p-2 mb-3">
+                    <label for="edit-court" class="form-label mx-2 text-body">审理机关:</label>
+                    <input type="text" class="form-control" id="edit-court">
+                  </div>
+                  <div class="align-items-center d-flex p-2 mb-3">
+                    <label for="edit-agency_fee" class="form-label mx-2 text-body">代理费用:</label>
+                    <input type="text" class="form-control" id="edit-agency_fee">
+                  </div>
+                  <div class="align-items-center d-flex p-2 mb-3">
+                    <label for="edit-dispute_subject" class="form-label mx-2 text-body">诉讼（仲裁）:</label>
+                    <input type="text" class="form-control" id="edit-dispute_subject">
+                  </div>
+                  <div class="row-form-select mb-3">
+                    <select class="col-form-select form-select-lg mx-3" id="edit-trial_level" name="edit-trial_level">
+                        <option selected>选择审级</option>
+                        <option value="1">一审</option>
+                        <option value="2">二审</option>
+                        <option value="3">三审</option>
+                    </select>
+                    <select class="col-form-select form-select-lg mx-3" id="edit-c_permission" name="edit-c_permission">
+                        <option selected>选择授权选项</option>
+                         <option value="1">一级</option>
+                         <option value="2">二级</option>
+                         <option value="3">三级</option>
+                         <option value="4">四级</option>
+                         <option value="5">五级</option>
+                         <option value="6">六级</option>
+                         <option value="7">七级</option>
+                         <option value="8">八级</option>
+                    </select>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+              <button type="button" class="btn btn-primary" onclick="updateCase()">更新</button>
+          </div>
+      </div>
+  </div>
+</div>
+
     <!-- 个人信息编辑模态框 -->
     <div id="profileModal" class="modal fade" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
     <div class="modal-dialog">
