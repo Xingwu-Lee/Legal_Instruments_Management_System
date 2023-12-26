@@ -78,7 +78,6 @@ function newCase() {
         dispute_subject = document.getElementById ('dispute_subject').value,
         agency_fee = document.getElementById ('agency_fee').value,
         trial_level = document.getElementById ('trial_level').value, c_permission = document.getElementById ('c_permission').value;
-        //user_name = user.name, user_id = user.id;
         // AJAX request to Flask backend for registration
          fetch (BASE_URL + '/newCase', {
              method: 'POST',
@@ -180,7 +179,7 @@ function deleteClient(clientId) {
     if (!confirm("确定要删除该客户吗？")) {
         return;
     }
-    fetch(BASE_URL + '/delete_client' + clientId, { method: 'DELETE' })
+    fetch(BASE_URL + '/delete_client/' + clientId, { method: 'DELETE' })
     .then(response => {
         if(response.ok) {
             alert('客户删除成功');
@@ -193,6 +192,7 @@ function deleteClient(clientId) {
 
 
 // 编辑客户信息
+//获取客户信息
 function editClient(clientId) {
     fetch(BASE_URL + '/get_client/' + clientId)
     .then(response => response.json())
@@ -236,7 +236,101 @@ function updateClient() {
     });
 }
 
-//文件上传功能
+// Load case list
+document.addEventListener('DOMContentLoaded', function() {
+    fetch(BASE_URL + '/get_cases')
+    .then(response => response.json())
+    .then(cases => {
+        var caseList = document.getElementById('case-list');
+        caseList.innerHTML = '';
+        cases.forEach((caseItem, index) => {
+            var row = `<tr>
+                        <th scope="row">${index + 1}</th>
+                        <td>${caseItem.case_number}</td>
+                        <td>${caseItem.client_name}</td>
+                        <td>${caseItem.case_type}</td>
+                        <td>${caseItem.lawyer_name}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="editCase('${caseItem.case_number}')">编辑</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCase('${caseItem.case_number}')">删除</button>
+                        </td>
+                        </tr>`;
+            caseList.innerHTML += row;
+        });
+    });
+});
+
+// Delete case
+function deleteCase(case_number) {
+    if (!confirm("确定要删除该案件吗？")) {
+        return;
+    }
+    fetch(BASE_URL + '/delete_case/' + case_number, { method: 'DELETE' })
+    .then(response => {
+        if(response.ok) {
+            alert('案件删除成功');
+            location.reload(); // Reload the page to update the case list
+        } else {
+            alert('案件删除失败');
+        }
+    });
+}
+
+// Edit case information
+function editCase(case_number) {
+    fetch(BASE_URL + '/get_case/' + case_number)
+    .then(response => response.json())
+    .then(caseData => {
+        document.getElementById('edit-opposite_party_name').value = caseData.opposite_party_name;
+        document.getElementById('edit-case_number').value = caseData.case_number;
+        document.getElementById('edit-case_type').value = caseData.case_type;
+        document.getElementById('edit-court').value = caseData.court;
+        document.getElementById('edit-agency_fee').value = caseData.agency_fee;
+        document.getElementById('edit-dispute_subject').value = caseData.dispute_subject;
+        document.getElementById('edit-trial_level').value = caseData.trial_level;
+        document.getElementById('edit-c_permission').value = caseData.c_permission;
+
+        // Assuming you have an edit modal with an ID 'editCaseModal'
+        var modal = new bootstrap.Modal(document.getElementById('editCaseModal'));
+        modal.show();
+
+        // Store the case ID in a hidden field or in a global variable for use in the update function
+        //document.getElementById('edit-case-id').value = case_number; // Assuming you have an input field with ID 'edit-case-id'
+    });
+}
+
+// Update case
+function updateCase() {
+    var opposite_party_name = document.getElementById('edit-opposite_party_name').value;
+    var case_number = document.getElementById('edit-case_number').value;
+    var case_type = document.getElementById('edit-case_type').value;
+    var court = document.getElementById('edit-court').value;
+    var agency_fee = document.getElementById('edit-agency_fee').value;
+    var dispute_subject = document.getElementById('edit-dispute_subject').value;
+    var trial_level = document.getElementById('edit-trial_level').value;
+    var c_permission = document.getElementById('edit-c_permission').value;
+
+    fetch(BASE_URL + '/update_case/' + case_number, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ opposite_party_name, case_number, case_type, court, agency_fee, dispute_subject, trial_level, c_permission })
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('案件信息更新成功');
+            location.reload(); // Reload the page to update the case list
+        } else {
+            alert('案件信息更新失败');
+        }
+    });
+}
+
+
+
+
+    //文件上传功能
 document.getElementById('uploadFileForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -305,7 +399,6 @@ function deleteFile(fileId) {
 }
 
 
-
 ```
 //身份证信息提取
 function extractIDCardInfo(idCard) {
@@ -342,74 +435,4 @@ function extractIDCardInfo(idCard) {
   const idCard = "身份证号码"; // 请替换为实际的身份证号码
   const info = extractIDCardInfo(idCard);
   console.log(info);  
-  
-  //数字转换成大写金额函数  
-function atoc(numberValue) {
-
-    numberValue = parseFloat(numberValue).toFixed(2);
-    var numberValue = new String(Math.round(numberValue * 100)); // 数字金额  
-    var chineseValue = ""; // 转换后的汉字金额  
-    var String1 = "零壹贰叁肆伍陆柒捌玖"; // 汉字数字  
-    var String2 = "万仟佰拾亿仟佰拾万仟佰拾元角分"; // 对应单位  
-    var len = numberValue.length; // numberValue 的字符串长度  
-    var Ch1; // 数字的汉语读法  
-    var Ch2; // 数字位的汉字读法  
-    var nZero = 0; // 用来计算连续的零值的个数  
-    var String3; // 指定位置的数值  
-    if (len > 15) {
-        alert("超出计算范围");
-        return "";
-    }
-    if (numberValue == 0) {
-        chineseValue = "零元整";
-        return chineseValue;
-    }
-
-    String2 = String2.substr(String2.length - len, len); // 取出对应位数的STRING2的值  
-    for (var i = 0; i < len; i++) {
-        String3 = parseInt(numberValue.substr(i, 1), 10); // 取出需转换的某一位的值  
-        if (i != (len - 3) && i != (len - 7) && i != (len - 11) && i != (len - 15)) {
-            if (String3 == 0) {
-                Ch1 = "";
-                Ch2 = "";
-                nZero = nZero + 1;
-            } else if (String3 != 0 && nZero != 0) {
-                Ch1 = "零" + String1.substr(String3, 1);
-                Ch2 = String2.substr(i, 1);
-                nZero = 0;
-            } else {
-                Ch1 = String1.substr(String3, 1);
-                Ch2 = String2.substr(i, 1);
-                nZero = 0;
-            }
-        } else { // 该位是万亿，亿，万，元位等关键位  
-            if (String3 != 0 && nZero != 0) {
-                Ch1 = "零" + String1.substr(String3, 1);
-                Ch2 = String2.substr(i, 1);
-                nZero = 0;
-            } else if (String3 != 0 && nZero == 0) {
-                Ch1 = String1.substr(String3, 1);
-                Ch2 = String2.substr(i, 1);
-                nZero = 0;
-            } else if (String3 == 0 && nZero >= 3) {
-                Ch1 = "";
-                Ch2 = "";
-                nZero = nZero + 1;
-            } else {
-                Ch1 = "";
-                Ch2 = String2.substr(i, 1);
-                nZero = nZero + 1;
-            }
-            if (i == (len - 11) || i == (len - 3)) { // 如果该位是亿位或元位，则必须写上  
-                Ch2 = String2.substr(i, 1);
-            }
-        }
-        chineseValue = chineseValue + Ch1 + Ch2;
-    }
-
-    if (String3 == 0) { // 最后一位（分）为0时，加上“整”  
-        chineseValue = chineseValue + "整";
-    }
-    return chineseValue;
-}
 ```

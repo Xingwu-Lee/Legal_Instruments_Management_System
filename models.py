@@ -46,7 +46,7 @@ class Case(db.Model):
     client_name = db.Column(db.String(100), nullable=False)
     client_id = db.Column(db.String(20), db.ForeignKey('client.citizen_id'), nullable=False)
     lawyer_name = db.Column(db.String(100), nullable=False)
-    lawyer_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False, primary_key=True, default=str(uuid.uuid4()))
+    lawyer_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     case_number = db.Column(db.String(20), unique=True, nullable=False)
     opposite_party_name = db.Column(db.String(100))
     case_type = db.Column(db.String(50), nullable=False)

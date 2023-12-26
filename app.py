@@ -8,7 +8,6 @@ from middlewares import check_empty_json
 import os
 import uuid
 
-#Test: This message is edited in windows ssh connected to a Macbook
 
 app = Flask(__name__, template_folder='web', static_folder='web/src')
 #CORS(app, supports_credentials=True, expose_headers=['Content-Type', 'Authorization', 'X-Requested-With'])
@@ -81,12 +80,11 @@ def profile():
     user_id = session.get('user_id')
     if not user_id:
         return redirect(url_for('login'))
-    #user = session.get(User, user_id)
     user = User.query.get(user_id)  # 从数据库获取用户信息
     print("User:", user)
     if user:
         return render_template('main.html', user_name=user.name, user_phone=user.phone, user_id=user.id)
-        #return render_template('main.html', user_name=user.name, user_phone=user.phone, token=token)
+        # return render_template('main.html', user_name=user.name, user_phone=user.phone, token=token)
     else:
         return redirect(url_for('login'))  # 如果无法获取用户信息，则重定向到登录页面
 
@@ -135,6 +133,7 @@ def searchClients():
     result = [{'citizen_id': client.citizen_id, 'name': client.name} for client in clients]
     return jsonify(result)
 
+#加载客户列表
 @app.route('/get_clients')
 def get_clients():
     clients = Client.query.all()
@@ -151,7 +150,7 @@ def delete_client(client_id):
     return jsonify({'message': '客户不存在'}), 404
 
 
-#填充客户编辑表单
+#获取单个客户信息
 @app.route('/get_client/<client_id>')
 def get_client(client_id):
     client = Client.query.get(client_id)
@@ -159,7 +158,7 @@ def get_client(client_id):
         client_data = {'id': client.id, 'name': client.name, 'phone': client.phone, 'citizen_id': client.citizen_id, 'address': client.address, 'email': client.email, 'postal_code': client.postal_code}
         return jsonify(client_data)
     return jsonify({'message': '客户不存在'}), 404
-
+#update the client
 @app.route('/update_client/<client_id>', methods=['PUT'])
 def update_client(client_id):
     data = request.get_json()
@@ -174,6 +173,60 @@ def update_client(client_id):
         db.session.commit()
         return jsonify({'message': '客户信息已更新'})
     return jsonify({'message': '客户不存在'}), 404
+
+# Load the list of cases
+@app.route('/get_cases')
+def get_cases():
+    cases = Case.query.all()
+    case_list = [{'case_number': case.case_number, 'client_name': case.client_name, 'case_type': case.case_type, 'lawyer_name': case.lawyer_name} for case in cases]
+    return jsonify(case_list)
+
+# Delete the case
+@app.route('/delete_case/<case_number>', methods=['DELETE'])
+def delete_case(case_number):
+    case = Case.query.get(case_number)
+    if case:
+        db.session.delete(case)
+        db.session.commit()
+        return jsonify({'message': '案件删除成功'})
+    return jsonify({'message': '案件不存在'}), 404
+
+# Get single case info
+@app.route('/get_case/<case_number>')
+def get_case(case_number):
+    case = Case.query.get(case_number)
+    if case:
+        case_data = {
+            'opposite_party_name': case.opposite_party_name,
+            'case_number': case.case_number,
+            'case_type': case.case_type,
+            'court': case.court,
+            'agency_fee': case.agency_fee,
+            'dispute_subject': case.dispute_subject,
+            'trial_level': case.trial_level,
+            'c_permission': case.c_permission
+        }
+        return jsonify(case_data)
+    return jsonify({'message': '案件不存在'}), 404
+
+# Update the case info
+@app.route('/update_case/<case_number>', methods=['PUT'])
+def update_case(case_number):
+    data = request.get_json()
+    case = Case.query.get(case_number)
+    if case:
+        case.opposite_party_name = data['opposite_party_name']
+        case.case_number = data['case_number']
+        case.case_type = data['case_type']
+        case.court = data['court']
+        case.agency_fee = data['agency_fee']
+        case.dispute_subject = data['dispute_subject']
+        case.trial_level = data['trial_level']
+        case.c_permission = data['c_permission']
+        db.session.commit()
+        return jsonify({'message': '案件信息已更新'})
+    return jsonify({'message': '案件不存在'}), 404
+
 
 
 # 路由处理文件上传
@@ -282,7 +335,7 @@ def create_case(user_id):
     db.session.add(new_case)
     db.session.commit()
 
-    return jsonify({'message': 'New case created', 'case_id': new_case.id}), 201
+    return jsonify({'message': 'New case created', 'case_number': new_case.id}), 201
 
 
 '''

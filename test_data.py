@@ -55,3 +55,7 @@ if __name__ == "__main__":
         view_data()
     else:
         print("Invalid action. Use 'create', 'delete', or 'view'.")
+
+    def __init__(self, lawyer_id):
+        self.lawyer_id = lawyer_id
+        # Initialize other fields here
