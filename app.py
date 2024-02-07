@@ -19,6 +19,11 @@ app.secret_key = 'your_secret_key'  # 设置一个安全的密钥
 
 # Database Configuration
 #app.config.from_object('config_test.TestConfig')
+
+UPLOAD_FOLDER = '/database/file'
+#ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+
 app.config['UPLOADED_FILES_DEST'] = '/database/file'
 files = UploadSet('files', DOCUMENTS)
 configure_uploads(app, files)
@@ -137,7 +142,7 @@ def searchClients():
     # 使用SQLAlchemy查询数据库以模糊搜索用户
     clients = Client.query.filter(Client.name.ilike(f'%{query}%')).all()
     # 将结果转换为JSON并发送回前端
-    result = [{'citizen_id': client.citizen_id, 'name': client.name} for client in clients]
+    result = [{'citizen_id': client.citizen_id, 'name': client.name, } for client in clients]
     return jsonify(result)
 
 #加载客户列表
@@ -258,6 +263,32 @@ def upload_file():
     return jsonify({'message': '没有文件上传'}), 400
 
 
+'''
+def upload_file():
+    if 'file' not in request.files:
+        return redirect(request.url)
+    file = request.files['file']
+    if file.filename == '':
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        # Save document details in database
+        new_document = Document(
+            document_number=request.form['document_number'],
+            title=request.form['title'],
+            type=request.form['type'],
+            d_permission=request.form['d_permission'],
+            owner_id=1,  # Assign an owner ID
+            file_path=os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        )
+        db.session.add(new_document)
+        db.session.commit()
+
+        return redirect(url_for('index'))
+'''
+
 @app.route('/get_file_list')
 def get_file_list():
     # 这里的逻辑取决于您是如何存储文件信息的
@@ -349,22 +380,22 @@ def create_case(user_id):
 
 @app.route('/generate_pdf', methods=['POST'])
 def generate_pdf():
-    data = request.json
+    pdfdata = request.json
 
     # 获取用户选择的模板
-    template_choice = data.get('template_choice', 'default')
+    template_choice = pdfdata.get('template_choice', 'default')
 
     # 根据不同模板选择获取相应数据
     if template_choice == 'default':
         # 获取基本信息
-        party_a = data.get('party_a', 'Party A')
-        party_b = data.get('party_b', 'Party B')
-        agreement_content = data.get('agreement_content', 'This is the content of the agreement.')
+        party_a = pdfdata.get('party_a', 'Party A')
+        party_b = pdfdata.get('party_b', 'Party B')
+        agreement_content = pdfdata.get('agreement_content', 'This is the content of the agreement.')
 
         # 获取PDF格式设置
-        margin = data.get('margin', '2cm')
-        linespread = data.get('linespread', '1.5')
-        font_size = data.get('font_size', '12pt')
+        margin = pdfdata.get('margin', '2cm')
+        linespread = pdfdata.get('linespread', '1.5')
+        font_size = pdfdata.get('font_size', '12pt')
 
         latex_code = f"""
         \\documentclass[{font_size}]{{article}}
@@ -390,14 +421,14 @@ def generate_pdf():
         """
     elif template_choice == 'authorization_letter':
         # 获取受委托书的信息
-        client_name = data.get('client_name', '')
-        attorney_name = data.get('attorney_name', '')
-        work_unit = data.get('work_unit', '')
-        position = data.get('position', '')
-        phone = data.get('phone', '')
-        case_name = data.get('case_name', '')
-        case_reason = data.get('case_reason', '')
-        agent_power = data.get('agent_power', '')
+        client_name = pdfdata.get('client_name', '')
+        attorney_name = pdfdata.get('attorney_name', '')
+        work_unit = pdfdata.get('work_unit', '')
+        position = pdfdata.get('position', '')
+        phone = pdfdata.get('phone', '')
+        case_name = pdfdata.get('case_name', '')
+        case_reason = pdfdata.get('case_reason', '')
+        agent_power = pdfdata.get('agent_power', '')
 
         latex_code = f"""
         \\documentclass[12pt]{{article}}
@@ -435,12 +466,12 @@ def generate_pdf():
 
 
     elif template_choice == 'legal_rep_identity':
-        rep_name = data.get('rep_name', '')
-        position = data.get('position', '')
-        unit_name = data.get('unit_name', '')
-        date = data.get('date', '')
-        address = data.get('address', '')
-        phone = data.get('phone', '')
+        rep_name = pdfdata.get('rep_name', '')
+        position = pdfdata.get('position', '')
+        unit_name = pdfdata.get('unit_name', '')
+        date = pdfdata.get('date', '')
+        address = pdfdata.get('address', '')
+        phone = pdfdata.get('phone', '')
         year, month, day = date.split('-')
 
         latex_code = f"""
@@ -478,14 +509,14 @@ def generate_pdf():
         \\end{{document}}
         """
     elif template_choice == 'lawyer_agency_contract':
-        client_address = data.get('client_address', '')
-        client_postcode = data.get('client_postcode', '')
-        client_phone = data.get('client_phone', '')
-        opponent_name = data.get('opponent_name', '')
-        case_reason = data.get('case_reason', '')
-        trial_authority = data.get('trial_authority', '')
-        trial_level = data.get('trial_level', '')
-        dispute_object = data.get('dispute_object', '')
+        client_address = pdfdata.get('client_address', '')
+        client_postcode = pdfdata.get('client_postcode', '')
+        client_phone = pdfdata.get('client_phone', '')
+        opponent_name = pdfdata.get('opponent_name', '')
+        case_reason = pdfdata.get('case_reason', '')
+        trial_authority = pdfdata.get('trial_authority', '')
+        trial_level = pdfdata.get('trial_level', '')
+        dispute_object = pdfdata.get('dispute_object', '')
 
         latex_code = f"""
         \\documentclass[12pt]{{article}}
@@ -568,10 +599,10 @@ def generate_pdf():
         \\end{{document}}
         """
     elif template_choice == 'power_of_attorney':
-        client_unit = data.get('client_unit', '')
-        case = data.get('case', '')
-        case_reason = data.get('case_reason', '')
-        date = data.get('date', '')
+        client_unit = pdfdata.get('client_unit', '')
+        case = pdfdata.get('case', '')
+        case_reason = pdfdata.get('case_reason', '')
+        date = pdfdata.get('date', '')
         year, month, day = date.split('-')
 
         latex_code = f"""
@@ -610,18 +641,18 @@ def generate_pdf():
         """
     elif template_choice == 'contract':
 
-        client_name = data.get('client_name', '')
-        client_gender = data.get('client_gender', '')
-        client_id = data.get('client_id', '')
-        client_phone = data.get('client_phone', '')
-        client_email = data.get('client_email', '')
-        client_address = data.get('client_address', '')
-        opposing_party_name = data.get('opposing_party_name', '')
-        case_reason = data.get('case_reason', '')
-        judicial_body = data.get('judicial_body', '')
-        judicial_level = data.get('judicial_level', '')
-        lawyer_fee = data.get('lawyer_fee', '')
-        signing_date = data.get('signing_date', '')
+        client_name = pdfdata.get('client_name', '')
+        client_gender = pdfdata.get('client_gender', '')
+        client_id = pdfdata.get('client_id', '')
+        client_phone = pdfdata.get('client_phone', '')
+        client_email = pdfdata.get('client_email', '')
+        client_address = pdfdata.get('client_address', '')
+        opposing_party_name = pdfdata.get('opposing_party_name', '')
+        case_reason = pdfdata.get('case_reason', '')
+        judicial_body = pdfdata.get('judicial_body', '')
+        judicial_level = pdfdata.get('judicial_level', '')
+        lawyer_fee = pdfdata.get('lawyer_fee', '')
+        signing_date = pdfdata.get('signing_date', '')
 
         latex_code = f"""
         \\documentclass[12pt]{{article}}
@@ -704,13 +735,15 @@ def generate_pdf():
     with open(tex_filepath, "w", encoding="utf-8") as file:
         file.write(latex_code)
 
-    # pdflatex_path = "pdflatex"
+    # pdflatex_path = "/server/MiKTeX/miktex/bin/x64/pdflatex"
     # subprocess.run([pdflatex_path, "-output-directory", output_dir, tex_filepath])
 
     # xelatex_path = "xelatex"
     # subprocess.run([xelatex_path, "-output-directory", output_dir, tex_filepath])
 
-    lualatex_path = "/server/MiKTeX/miktex/bin/x64/lualatex"
+    #lualatex_path = r"/server/MiKTeX/miktex/bin/x64/lualatex.exe"
+    #目前使用绝对路径（‘\’是Windows格式），需要改成项目内相对路径用‘/’Linux格式
+    lualatex_path = r"E:\OneDrive\College\FYP\Legal_Instruments_Management_System\server\MiKTeX\miktex\bin\x64\lualatex"
     subprocess.run([lualatex_path, "-output-directory", output_dir, tex_filepath])
 
     return send_from_directory(output_dir, pdf_filename, as_attachment=True)

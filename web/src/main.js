@@ -329,14 +329,15 @@ function updateCase() {
 
 
 
-
     //文件上传功能
 document.getElementById('uploadFileForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
     var formData = new FormData();
     var fileInput = document.getElementById('fileInput');
-    var fileDescription = document.getElementById('fileDescription').value;
+    var file_title = document.getElementById('file_title').value;
+    var file_type = document.getElementById('file_type').value;
+    var file_permission = document.getElementById('file_permission').value;
 
     formData.append('file', fileInput.files[0]);
     formData.append('description', fileDescription);
@@ -357,6 +358,7 @@ document.getElementById('uploadFileForm').addEventListener('submit', function(e)
         console.error('Error:', error);
     });
 });
+
 
 //文件列表加载
 document.addEventListener('DOMContentLoaded', function() {

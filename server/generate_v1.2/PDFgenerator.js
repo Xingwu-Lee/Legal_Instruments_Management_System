@@ -21,6 +21,8 @@ function createInput(inputId, inputType, name, required, placeholder = '') {
     return input;
 }
 
+
+
 function createTextArea(inputId, name, rows, cols, required) {
     var textarea = document.createElement('textarea');
     textarea.className = 'form-control';
@@ -41,7 +43,7 @@ function addFormField(container, label, input) {
 function updateFormFields() {
     var templateChoice = document.getElementById('template_choice').value;
     var formFieldsDiv = document.getElementById('formFields');
-            
+          
             
     while (formFieldsDiv.firstChild) {
         formFieldsDiv.removeChild(formFieldsDiv.firstChild);
@@ -59,13 +61,13 @@ function updateFormFields() {
     } else if (templateChoice === 'authorization_letter') {
                 
         addFormField(formFieldsDiv, createLabel('client_name', '委托人：'), createInput('client_name', 'text', 'client_name', true));
-        addFormField(formFieldsDiv, createLabel('attorney_name', '受委托人姓名：'), createInput('attorney_name', 'text', 'attorney_name', true));
-        addFormField(formFieldsDiv, createLabel('work_unit', '工作单位：'), createInput('work_unit', 'text', 'work_unit', false));
+        addFormField(formFieldsDiv, createLabel('lawyer_name', '受委托人姓名：'), createInput('lawyer_name', 'text', 'lawyer_name', true));
+        addFormField(formFieldsDiv, createLabel('opposite_party_name', '工作单位：'), createInput('opposite_party_name', 'text', 'opposite_party_name', false));
         addFormField(formFieldsDiv, createLabel('position', '职务：'), createInput('position', 'text', 'position', false));
         addFormField(formFieldsDiv, createLabel('phone', '电话：'), createInput('phone', 'tel', 'phone', false));
         addFormField(formFieldsDiv, createLabel('case_name', '案件：'), createInput('case_name', 'text', 'case_name', true));
-        addFormField(formFieldsDiv, createLabel('case_reason', '案件原因：'), createInput('case_reason', 'text', 'case_reason', true));
-        addFormField(formFieldsDiv, createLabel('agent_power', '代理权限：'), createTextArea('agent_power', 'agent_power', 4, 50, true));
+        addFormField(formFieldsDiv, createLabel('case_type', '案由：'), createInput('case_type', 'text', 'case_type', true));
+        addFormField(formFieldsDiv, createLabel('c_permission', '代理权限：'), createTextArea('c_permission', 'c_permission', 4, 50, true));
    
     }else if (templateChoice === 'legal_rep_identity') {
         addFormField(formFieldsDiv, createLabel('rep_name', '代表人姓名：'), createInput('rep_name', 'text', 'rep_name', true));
@@ -88,7 +90,23 @@ function updateFormFields() {
         addFormField(formFieldsDiv, createLabel('case', '案件：'), createInput('case', 'text', 'case', true));
         addFormField(formFieldsDiv, createLabel('case_reason', '案件原因：'), createInput('case_reason', 'text', 'case_reason', true));
         addFormField(formFieldsDiv, createLabel('date', '日期：'), createInput('date', 'date', 'date', true));
+        
+    } else if (templateChoice === 'contract') {
+        addFormField(formFieldsDiv, createLabel('client_name', '客户名称：'), createInput('client_name', 'text', 'client_name', true));
+        addFormField(formFieldsDiv, createLabel('client_gender', '客户性别：'), createInput('client_gender', 'text', 'client_gender', true));
+        addFormField(formFieldsDiv, createLabel('client_id', '客户身份证号：'), createInput('client_id', 'text', 'client_id', true));
+        addFormField(formFieldsDiv, createLabel('client_phone', '客户电话：'), createInput('client_phone', 'tel', 'client_phone', true));
+        addFormField(formFieldsDiv, createLabel('client_email', '客户电子邮件：'), createInput('client_email', 'email', 'client_email', true));
+        addFormField(formFieldsDiv, createLabel('client_address', '客户地址：'), createInput('client_address', 'text', 'client_address', true));
+        addFormField(formFieldsDiv, createLabel('opposing_party_name', '对方当事人名称：'), createInput('opposing_party_name', 'text', 'opposing_party_name', true));
+        addFormField(formFieldsDiv, createLabel('case_reason', '案件原因：'), createInput('case_reason', 'text', 'case_reason', true));
+        addFormField(formFieldsDiv, createLabel('judicial_body', '司法机关：'), createInput('judicial_body', 'text', 'judicial_body', true));
+        addFormField(formFieldsDiv, createLabel('judicial_level', '司法级别：'), createInput('judicial_level', 'text', 'judicial_level', true));
+        addFormField(formFieldsDiv, createLabel('lawyer_fee', '律师费：'), createInput('lawyer_fee', 'number', 'lawyer_fee', true));
+        addFormField(formFieldsDiv, createLabel('signing_date', '签署日期：'), createInput('signing_date', 'date', 'signing_date', true));
     }
+
+
 
 }
 let historyRecords = [];
@@ -96,11 +114,12 @@ let historyRecords = [];
 document.getElementById('pdfForm').addEventListener('submit', function (event) {
     event.preventDefault();
     // 显示加载动画
-    //document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').style.display = 'block';
 
     const templateChoice = document.getElementById('template_choice').value;
-    let formData = {};
-
+    
+    let formData = new FormData();
+    
     if (templateChoice === 'default') {
         formData = {
             template_choice: 'default',
@@ -117,13 +136,13 @@ document.getElementById('pdfForm').addEventListener('submit', function (event) {
         formData = {
             template_choice: 'authorization_letter',
             client_name: document.getElementById('client_name').value,
-            attorney_name: document.getElementById('attorney_name').value,
-            work_unit: document.getElementById('work_unit').value,
+            lawyer_name: document.getElementById('lawyer_name').value,
+            opposite_party_name: document.getElementById('opposite_party_name').value,
             position: document.getElementById('position').value,
             phone: document.getElementById('phone').value,
             case_name: document.getElementById('case_name').value,
-            case_reason: document.getElementById('case_reason').value,
-            agent_power: document.getElementById('agent_power').value,
+            case_type: document.getElementById('case_type').value,
+            c_permission: document.getElementById('c_permission').value,
             margin: '1in', 
             linespread: '1.5',
             font_size: '12pt'
@@ -166,13 +185,30 @@ document.getElementById('pdfForm').addEventListener('submit', function (event) {
         };
         console.log("Power of Attorney Template Data:", formData);
         
+    }else if (templateChoice === 'contract') {
+        formData = {
+            template_choice: 'contract',
+            client_name: document.getElementById('client_name').value,
+            client_gender: document.getElementById('client_gender').value,
+            client_id: document.getElementById('client_id').value,
+            client_phone: document.getElementById('client_phone').value,
+            client_email: document.getElementById('client_email').value,
+            client_address: document.getElementById('client_address').value,
+            opposing_party_name: document.getElementById('opposing_party_name').value,
+            case_reason: document.getElementById('case_reason').value,
+            judicial_body: document.getElementById('judicial_body').value,
+            judicial_level: document.getElementById('judicial_level').value,
+            lawyer_fee: document.getElementById('lawyer_fee').value,
+            signing_date: document.getElementById('signing_date').value,
+        };
+        console.log("Contract Template Data:", formData);
     }
+
     // 显示PDF查看器
     var pdfViewer = document.getElementById('pdfViewer');
     pdfViewer.hidden = false;
 
-    //改为BASE_URL + '/newClient'的方式有bug，无法生成内容，初步估计是‘const BASE_URL = 'http://127.0.0.1:8080';’造成的 http://127.0.0.1:8080/generate_pdf
-    fetch('http://127.0.0.1:8080/generate_pdf', {
+    fetch('http://localhost:5000/generate_pdf', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
