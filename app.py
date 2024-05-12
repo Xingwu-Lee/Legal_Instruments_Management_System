@@ -57,10 +57,10 @@ def login():
             return jsonify({'message': '用户名不存在'}), 401
         stored_hashed_password = user.password
         stored_salt = user.salt
-        if check_password_hash(stored_hashed_password, data['password'] + stored_salt):
-            #token = create_access_token(identity=user.id)
-            session['user_id'] = user.id  # 存储用户ID到会话
-            return jsonify({'redirect': url_for('profile')}), 200
+        if check_password_hash(user.password, data['password']):
+            access_token = create_access_token(identity=user.id,
+                                               additional_claims={'name': user.name, 'phone': user.phone})
+            return jsonify({'access_token': access_token}), 200
         else:
             return jsonify({'message': '密码错误'}), 401
     else:
@@ -88,15 +88,12 @@ def register():
     return jsonify({'message': '注册成功！'}), 201
 
 @app.route('/profile', methods=['GET', 'POST'])
+@jwt_required()
 def profile():
-    user_id = session.get('user_id')
-    if not user_id:
-        return redirect(url_for('login'))
-    user = User.query.get(user_id)  # 从数据库获取用户信息
-    print("User:", user)
+    current_user_id = get_jwt_identity()
+    user = next((u for u in User if u.id == current_user_id), None)
     if user:
-        return render_template('main.html', user_name=user.name, user_phone=user.phone, user_id=user.id)
-        # return render_template('main.html', user_name=user.name, user_phone=user.phone, token=token)
+        return jsonify({'user_name': user.name, 'user_phone': user.phone}), 200
     else:
         return redirect(url_for('login'))  # 如果无法获取用户信息，则重定向到登录页面
 

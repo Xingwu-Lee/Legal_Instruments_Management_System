@@ -340,7 +340,9 @@ document.getElementById('uploadFileForm').addEventListener('submit', function(e)
     var file_permission = document.getElementById('file_permission').value;
 
     formData.append('file', fileInput.files[0]);
-    formData.append('description', fileDescription);
+    formData.append('file_title', file_title);
+    formData.append('file_type', file_type);
+    formData.append('file_permission', file_permission);
 
     fetch('/upload_file', {
         method: 'POST',
