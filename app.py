@@ -303,10 +303,9 @@ def upload_file():
 
 @app.route('/get_file_list')
 def get_file_list():
-    # 这里的逻辑取决于您是如何存储文件信息的
-    # 假设有一个函数get_all_files()返回所有文件信息
-    files = get_all_files() # 例如: [{'id': 1, 'name': 'file1.pdf', ...}, ...]
-    return jsonify(files)
+    files = Document.query.all()
+    files_list = [{'title': d.title, 'description': d.description, 'type': d.type} for d in files]
+    return jsonify(files_list)
 def get_all_files():
     # 查询所有文件信息
     documents = Document.query.all()

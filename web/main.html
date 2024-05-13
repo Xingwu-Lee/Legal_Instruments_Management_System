@@ -56,33 +56,21 @@
           <main class="col-12">
               <!-- 文件管理模块 -->
               <section id="file-management">
-                  <h2>文件管理</h2>
+                  <h2>本案件文件管理</h2>
                   <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#uploadFileModal">上传文件</button>
                   <table class="table">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">文件名</th>
-                            <th scope="col">描述</th>
-                            <th scope="col">上传日期</th>
+                            <th scope="col">文件描述</th>
+                            <th scope="col">文件类型</th>
                             <th scope="col">操作</th>
                         </tr>
                     </thead>
-                    <tbody>
-                     <!-- 使用循环来渲染每个文件的信息 -->
-                        {% for file in files %}
-                        <tr>
-                            <th scope="row">{{ loop.index }}</th>
-                            <td>{{ file.name }}</td>
-                            <td>{{ file.uploadDate }}</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary">预览</button>
-                                <a href="{{ file.downloadUrl }}" class="btn btn-sm btn-success" download>下载</a>
-                                <button class="btn btn-sm btn-danger" onclick="deleteFile('{{ file.id }}')">删除</button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+                            <tbody id="file-list">
+                              <!-- 文件列表项 -->
+                            </tbody>
                 </table>
               </section>
     
@@ -107,6 +95,7 @@
                           <thead>
                               <tr>
                                   <th scope="col">#</th>
+                                  <th scope="col">选择</th> <!-- Add a new header for selection -->
                                   <th scope="col">案件编号</th>
                                   <th scope="col">客户名</th>
                                   <th scope="col">案由</th>

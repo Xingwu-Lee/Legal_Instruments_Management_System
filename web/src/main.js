@@ -246,6 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
         cases.forEach((caseItem, index) => {
             var row = `<tr>
                         <th scope="row">${index + 1}</th>
+                        <td><input type="checkbox" class="form-check-input" onchange="toggleRowSelection(this)"></td>
                         <td>${caseItem.case_number}</td>
                         <td>${caseItem.client_name}</td>
                         <td>${caseItem.case_type}</td>
@@ -371,28 +372,26 @@ document.getElementById('uploadFileForm').addEventListener('submit', function(e)
 
 //文件列表加载
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('/get_file_list')
+    fetch(BASE_URL + '/get_file_list')
     .then(response => response.json())
     .then(files => {
-        var tableBody = document.querySelector('#file-management table tbody');
-        tableBody.innerHTML = ''; // 清空现有内容
+        var fileList = document.getElementById('file-list');
+        fileList.innerHTML = '';
         files.forEach((file, index) => {
             var row = `<tr>
                         <th scope="row">${index + 1}</th>
-                        <td>${file.name}</td>
+                        <td>${file.title}</td>
                         <td>${file.description}</td>
-                        <td>${file.uploadDate}</td>
+                        <td>${file.type}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary">预览</button>
-                            <a href="${file.downloadUrl}" class="btn btn-sm btn-success" download>下载</a>
-                            <button class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">删除</button>
+                                <button class="btn btn-sm btn-primary">预览</button>
+                                <button class="btn btn-sm btn-primary">下载</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteFile('${file.id}')">删除</button>
+                            </td>
                         </td>
                         </tr>`;
-            tableBody.innerHTML += row;
+            fileList.innerHTML += row;
         });
-    })
-    .catch(error => {
-        console.error('Error:', error);
     });
 });
 
@@ -409,7 +408,14 @@ function deleteFile(fileId) {
     });
 }
 
-
+function toggleRowSelection(checkbox) {
+    var row = checkbox.closest('.case-row');
+    if (checkbox.checked) {
+        row.classList.add('table-primary');
+    } else {
+        row.classList.remove('table-primary');
+    }
+}
 ```
 //身份证信息提取
 function extractIDCardInfo(idCard) {
