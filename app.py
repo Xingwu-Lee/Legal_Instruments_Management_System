@@ -57,10 +57,10 @@ def login():
             return jsonify({'message': '用户名不存在'}), 401
         stored_hashed_password = user.password
         stored_salt = user.salt
-        if check_password_hash(user.password, data['password']):
-            access_token = create_access_token(identity=user.id,
-                                               additional_claims={'name': user.name, 'phone': user.phone})
-            return jsonify({'access_token': access_token}), 200
+        if check_password_hash(stored_hashed_password, data['password'] + stored_salt):
+            #token = create_access_token(identity=user.id)
+            session['user_id'] = user.id  # 存储用户ID到会话
+            return jsonify({'redirect': url_for('profile')}), 200
         else:
             return jsonify({'message': '密码错误'}), 401
     else:
@@ -88,12 +88,15 @@ def register():
     return jsonify({'message': '注册成功！'}), 201
 
 @app.route('/profile', methods=['GET', 'POST'])
-@jwt_required()
 def profile():
-    current_user_id = get_jwt_identity()
-    user = next((u for u in User if u.id == current_user_id), None)
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+    user = User.query.get(user_id)  # 从数据库获取用户信息
+    print("User:", user)
     if user:
-        return jsonify({'user_name': user.name, 'user_phone': user.phone}), 200
+        return render_template('main.html', user_name=user.name, user_phone=user.phone, user_id=user.id)
+        # return render_template('main.html', user_name=user.name, user_phone=user.phone, token=token)
     else:
         return redirect(url_for('login'))  # 如果无法获取用户信息，则重定向到登录页面
 
@@ -243,15 +246,17 @@ def update_case(case_number):
 def upload_file():
     if 'file' in request.files:
         file = request.files['file']
-        description = request.form.get('description', '')
+        file_title = request.form.get('file_title', '')
+        file_type = request.form.get('file_type', '')
+
+        # Process the file as needed
         filename = files.save(file)
         file_url = files.url(filename)
-
-        # 创建一个新的文档对象并保存到数据库
+        # Create a new document object and save it to the database
         new_document = Document(
-            name=filename,
+            name=file_title,
             url=file_url,
-            description=description
+            description=file_type
         )
         db.session.add(new_document)
         db.session.commit()
@@ -259,6 +264,16 @@ def upload_file():
         return jsonify({'message': '文件上传成功', 'url': file_url})
     return jsonify({'message': '没有文件上传'}), 400
 
+
+    data = request.get_json()
+    print("Received data:", data)
+    file_id = str(uuid.uuid4())
+    new_document = Document(id=file_id, title=data['file_title'], description=data['file_description'], type=data['file_type'],
+                        case_number=data['file_case_number'])
+    print("New file info:", new_document)
+    db.session.add(new_document)
+    db.session.commit()
+    return jsonify({'message': '文件上传成功！'}), 201
 
 '''
 def upload_file():

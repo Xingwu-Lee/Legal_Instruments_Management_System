@@ -329,37 +329,44 @@ function updateCase() {
 
 
 
-    //文件上传功能
+//文件上传功能
 document.getElementById('uploadFileForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    var formData = new FormData();
-    var fileInput = document.getElementById('fileInput');
+    // var fileInput = document.getElementById('fileInput');
     var file_title = document.getElementById('file_title').value;
+    var file_description = document.getElementById('file_description').value;
     var file_type = document.getElementById('file_type').value;
-    var file_permission = document.getElementById('file_permission').value;
-
-    formData.append('file', fileInput.files[0]);
-    formData.append('file_title', file_title);
-    formData.append('file_type', file_type);
-    formData.append('file_permission', file_permission);
-
-    fetch('/upload_file', {
+    var file_case_number = document.getElementById('file_case_number').value;
+    fetch(BASE_URL + '/upload_file', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: formData
+        body: JSON.stringify({
+            file_title: file_title, file_description: file_description,
+            file_type: file_type,
+            file_case_number: file_case_number
+        }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        // 可以在此处添加代码来处理上传后的响应，如刷新文件列表
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        .then(response => {
+            if (response.status === 201) {
+                response.json().then(data => {
+                    alert('消息：' + data.message); // 显示自定义错误消息
+                    modalControl(null, true)
+                });
+            } else if (response.status === 409) {
+                alert('消息：' + data.message); // 显示自定义错误消息
+            } else if (response.status === 400) {
+                response.json().then(data => {
+                    alert('消息：' + data.error()); //输入有空项
+                });
+            }
+        });
 });
+
+
+
 
 
 //文件列表加载

@@ -454,38 +454,36 @@
                   </div>
                   <div class="modal-body">
                       <form id="uploadFileForm">
+                          <!--
                           <div class="mb-3">
                               <label for="fileInput" class="form-label">选择文件</label>
                               <input class="form-control" type="file" id="fileInput">
                           </div>
+                           -->
                           <div class="align-items-center d-flex p-2 mb-3">
                             <label for="file_title" class="form-label mx-2 text-body">
-                             <span class="d-inline-block" style="white-space: nowrap ;">文件名:</span>
+                             <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文件名:</span>
                            </label>
                             <input type="text" class="form-control" id="file_title">
                           </div>
                           <div class="align-items-center d-flex p-2 mb-3">
                             <label for="file_type" class="form-label mx-2 text-body">
-                             <span class="d-inline-block" style="white-space: nowrap ;">文件类型:</span>
+                             <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文件描述:</span>
+                           </label>
+                            <input type="text" class="form-control" id="file_description">
+                          </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="file_type" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文件类型:</span>
                            </label>
                             <input type="text" class="form-control" id="file_type">
                           </div>
-                          <div class="row-form-select mb-3">
-                              <label for="file_type" class="form-label mx-2 text-body">
-                                <span class="d-inline-block" style="white-space: nowrap ;">文件权限:</span>
-                              </label>
-                              <select class="col-form-select form-select-lg mx-3" aria-label="Default select example" id="file_permission" name="file_permission">
-                                 <option selected>选择授权选项</option>
-                                 <option value="1">一级</option>
-                                 <option value="2">二级</option>
-                                 <option value="3">三级</option>
-                                 <option value="4">四级</option>
-                                 <option value="5">五级</option>
-                                 <option value="6">六级</option>
-                                 <option value="7">七级</option>
-                                 <option value="8">八级</option>
-                             </select>
-                           </div>
+                          <div class="align-items-center d-flex p-2 mb-3">
+                            <label for="file_type" class="form-label mx-2 text-body">
+                             <span class="d-inline-block" style="white-space: nowrap ;">所属案件编号:</span>
+                           </label>
+                            <input type="text" class="form-control" id="file_case_number">
+                          </div>
                           <button type="submit" class="btn btn-primary">上传</button>
                       </form>
                   </div>
