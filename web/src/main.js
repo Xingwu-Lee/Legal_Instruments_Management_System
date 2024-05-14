@@ -258,6 +258,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         </tr>`;
             caseList.innerHTML += row;
         });
+        // Select the first case by default
+        var firstRowCheckbox = document.querySelector('.case-checkbox');
+        if (firstRowCheckbox) {
+            firstRowCheckbox.checked = true;
+            toggleRowSelection(firstRowCheckbox);
+        }
     });
 });
 
@@ -416,6 +422,8 @@ function toggleRowSelection(checkbox) {
         row.classList.remove('table-primary');
     }
 }
+
+
 ```
 //身份证信息提取
 function extractIDCardInfo(idCard) {

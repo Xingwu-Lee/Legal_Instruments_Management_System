@@ -244,32 +244,10 @@ def update_case(case_number):
 # 路由处理文件上传
 @app.route('/upload_file', methods=['POST'])
 def upload_file():
-    if 'file' in request.files:
-        file = request.files['file']
-        file_title = request.form.get('file_title', '')
-        file_type = request.form.get('file_type', '')
-
-        # Process the file as needed
-        filename = files.save(file)
-        file_url = files.url(filename)
-        # Create a new document object and save it to the database
-        new_document = Document(
-            name=file_title,
-            url=file_url,
-            description=file_type
-        )
-        db.session.add(new_document)
-        db.session.commit()
-
-        return jsonify({'message': '文件上传成功', 'url': file_url})
-    return jsonify({'message': '没有文件上传'}), 400
-
-
     data = request.get_json()
     print("Received data:", data)
     file_id = str(uuid.uuid4())
-    new_document = Document(id=file_id, title=data['file_title'], description=data['file_description'], type=data['file_type'],
-                        case_number=data['file_case_number'])
+    new_document = Document(id=file_id, title=data['file_title'], description=data['file_description'], type=data['file_type'], case_number=data['file_case_number'])
     print("New file info:", new_document)
     db.session.add(new_document)
     db.session.commit()

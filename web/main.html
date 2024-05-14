@@ -266,12 +266,6 @@
                             <input type="text" class="form-control" id="address">
                           </div>
                          </form>
-                         <div class="align-items-center d-flex p-2 mb-3">
-                          <label for="clientName" class="form-label mx-2 text-body">
-                           <span class="d-inline-block" style="white-space: nowrap ;">&nbsp;&nbsp;&nbsp;&nbsp;或者上传文件提取用户信息:</span>
-                         </label>
-                          <button class="btn btn-primary mb-3 mx-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal">上传文件</button>
-                        </div>
                        </div>
                        <div class="modal-footer">
                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
@@ -484,12 +478,12 @@
       <div class="modal-dialog modal-xl">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title" id="pdfGeneratorModalLabel">PDF 生成器</h5>
+                  <h5 class="modal-title" id="pdfGeneratorModalLabel">文书生成</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body d-flex">
                   <form id="pdfForm" class="me-3">
-                      <h1>PDF 生成器</h1>
+                      <h1>文书生成</h1>
                       <label for="template_choice">选择模板：</label>
                       <select id="template_choice" name="template_choice" onchange="updateFormFields()">
                           <option value="default">默认</option>
@@ -509,7 +503,7 @@
 
     <footer class="bg-light text-center text-lg-start">
       <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-          © 2023 法律文书管理系统
+          © 2024 法律文书管理系统
       </div>
     </footer>
     <script>
